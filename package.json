@@ -257,7 +257,8 @@
     "stylelint-order": "4.0.0",
     "systemjs": "6.2.5",
     "tsickle": "0.38.0",
-    "typescript": "~3.8.3",
+    "tslib": "^1.11.1",
+    "typescript": "~3.7.4",
     "validate-commit-msg": "2.14.0",
     "zone.js": "0.10.2"
   },
