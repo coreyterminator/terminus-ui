@@ -16,6 +16,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": false,
+    "noUnusedLocals": true,
     "outDir": "./dist/out-tsc",
     "skipLibCheck": true,
     "sourceMap": true,
