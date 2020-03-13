@@ -158,7 +158,7 @@
     "@amcharts/amcharts4": "4.9.6",
     "@amcharts/amcharts4-geodata": "4.1.12",
     "@angular/animations": "9.0.6",
-    "@angular/cdk": "8.2.3",
+    "@angular/cdk": "9.1.2",
     "@angular/common": "9.0.6",
     "@angular/core": "9.0.6",
     "@angular/flex-layout": "9.0.0-beta.29",
@@ -175,7 +175,7 @@
     "popper.js": "1.16.1",
     "text-mask-addons": "3.8.0",
     "text-mask-core": "5.1.2"
-},
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.6",
     "@angular-devkit/build-ng-packagr": "~0.900.6",
