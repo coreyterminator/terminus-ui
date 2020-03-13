@@ -1,6 +1,3 @@
-import 'hammerjs';
-
-
 const mock = () => {
   let storage: {[key: string]: any} = {};
   return {
@@ -21,7 +18,6 @@ Object.defineProperty(window, 'CSS', { value: () => ({}) });
  */
 const WARN_SUPPRESSING_PATTERNS = [
   /Could not find Angular Material core theme/,
-  /Could not find HammerJS/,
 ];
 const warn = console.warn;
 Object.defineProperty(console, 'warn', {
