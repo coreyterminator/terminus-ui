@@ -161,7 +161,7 @@
     "@angular/cdk": "8.2.3",
     "@angular/common": "9.0.6",
     "@angular/core": "9.0.6",
-    "@angular/flex-layout": "8.0.0-beta.26",
+    "@angular/flex-layout": "9.0.0-beta.29",
     "@angular/forms": "9.0.6",
     "@angular/material": "8.2.3",
     "@angular/platform-browser": "9.0.6",
@@ -175,7 +175,6 @@
     "popper.js": "1.16.1",
     "text-mask-addons": "3.8.0",
     "text-mask-core": "5.1.2"
-  ,    "tslib": "^1.10.0"
 },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.6",
@@ -257,6 +256,7 @@
     "stylelint": "13.2.0",
     "stylelint-order": "4.0.0",
     "systemjs": "6.2.5",
+    "tslib": "^1.10.0",
     "typescript": "~3.7.4",
     "validate-commit-msg": "2.14.0",
     "zone.js": "~0.10.2"
