@@ -175,10 +175,11 @@
     "popper.js": "1.16.1",
     "text-mask-addons": "3.8.0",
     "text-mask-core": "5.1.2"
-  },
+  ,    "tslib": "^1.10.0"
+},
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.900.6",
-    "@angular-devkit/build-ng-packagr": "0.900.6",
+    "@angular-devkit/build-angular": "~0.900.6",
+    "@angular-devkit/build-ng-packagr": "~0.900.6",
     "@angular-eslint/builder": "^0.0.1-alpha.20",
     "@angular-eslint/eslint-plugin": "^0.0.1-alpha.20",
     "@angular-eslint/eslint-plugin-template": "^0.0.1-alpha.20",
@@ -198,7 +199,7 @@
     "@terminus/eslint-config-frontend": "1.1.0",
     "@terminus/stylelint-config-frontend": "1.1.3",
     "@types/jest": "24.0.25",
-    "@types/node": "12.12.29",
+    "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "all-contributors-cli": "6.14.0",
     "autoprefixer": "9.7.4",
@@ -241,7 +242,7 @@
     "lint-staged": "9.5.0",
     "markdown-link-check": "3.8.0",
     "merge-files": "0.1.2",
-    "ng-packagr": "9.0.3",
+    "ng-packagr": "^9.0.0",
     "node-sass": "4.13.1",
     "node-sass-import": "2.0.1",
     "remap-istanbul": "0.13.0",
@@ -256,11 +257,9 @@
     "stylelint": "13.2.0",
     "stylelint-order": "4.0.0",
     "systemjs": "6.2.5",
-    "tsickle": "0.38.0",
-    "tslib": "^1.11.1",
     "typescript": "~3.7.4",
     "validate-commit-msg": "2.14.0",
-    "zone.js": "0.10.2"
+    "zone.js": "~0.10.2"
   },
   "resolutions": {
     "jsdom": "15.2.1"
