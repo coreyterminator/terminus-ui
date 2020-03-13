@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { MatTooltip } from '@angular/material/tooltip';
 
 
 
@@ -82,7 +83,7 @@ export class TsTooltipComponent {
    * Access Material Tooltip Directive
    */
   @ViewChild('tooltip', { static: true })
-  public matTooltip;
+  public matTooltip!: MatTooltip;
 
   /**
    * Call Material Tooltip's show() method

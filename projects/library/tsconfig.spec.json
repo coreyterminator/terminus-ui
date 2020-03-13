@@ -1,7 +1,7 @@
 {
   "extends": "./../../tsconfig.json",
   "includes": [
-    "../projects/**/!(*spec|*mock).ts"
+    "projects/**/!(*spec|*mock|*d).ts"
   ],
   "compilerOptions": {
     "baseUrl": "",

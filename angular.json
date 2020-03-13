@@ -256,7 +256,6 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "outputPath": "dist/library",
             "tsConfig": "projects/library/tsconfig.lib.json",
             "project": "projects/library/ng-package.json"
           }
@@ -269,8 +268,9 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
+            "eslintConfig": ".eslintrc.js",
             "tsConfig": [
               "projects/library/tsconfig.lib.json",
               "projects/library/tsconfig.spec.json"
