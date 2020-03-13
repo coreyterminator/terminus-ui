@@ -350,7 +350,7 @@ export class Label {
   @ViewChild(TsInputComponent, { static: true })
   inputComponent: TsInputComponent;
 
-  @ContentChild(TsFormFieldComponent, { static: false })
+  @ContentChild(TsFormFieldComponent)
   formFieldComponent: TsFormFieldComponent;
 }
 
@@ -419,7 +419,7 @@ export class Textarea {
 @Component({ template: `<div *ngIf="show"><ts-input></ts-input></div>` })
 export class ToggleInputComponent {
 
-  @ViewChild(TsInputComponent, { static: false })
+  @ViewChild(TsInputComponent)
   inputComponent!: TsInputComponent;
   public show = true;
 }

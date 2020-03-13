@@ -105,7 +105,7 @@ export class TsTabComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Content for the tab label given by `<ng-template tsTabLabel>`
    */
-  @ContentChild(TsTabLabelDirective, { static: false })
+  @ContentChild(TsTabLabelDirective)
   public templateLabel!: TsTabLabelDirective;
 
   /**

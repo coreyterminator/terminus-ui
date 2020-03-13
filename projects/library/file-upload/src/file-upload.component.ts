@@ -144,7 +144,7 @@ export class TsFileUploadComponent extends TsReactiveFormBaseComponent implement
   /**
    * Provide access to the file preview element
    */
-  @ViewChild('preview', { static: false })
+  @ViewChild('preview')
   public preview!: ElementRef;
 
   /**

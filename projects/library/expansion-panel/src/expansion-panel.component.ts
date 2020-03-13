@@ -196,7 +196,7 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
   /**
    * Reference to a passed in template (for lazy loading)
    */
-  @ContentChild(TsExpansionPanelContentDirective, { static: false })
+  @ContentChild(TsExpansionPanelContentDirective)
   public lazyContent!: TsExpansionPanelContentDirective;
 
   /**

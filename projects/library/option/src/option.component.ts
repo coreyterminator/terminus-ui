@@ -203,14 +203,14 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
   /**
    * Optional template passed in by the consumer
    */
-  @ContentChild(TemplateRef, { static: false })
+  @ContentChild(TemplateRef)
   // tslint:disable-next-line no-any
   public optionTemplate: TemplateRef<any> | undefined;
 
   /**
    * Access the user-defined text content
    */
-  @ContentChild(TsOptionDisplayDirective, { static: false })
+  @ContentChild(TsOptionDisplayDirective)
   public displayElementRef: TsOptionDisplayDirective | undefined;
 
   /**

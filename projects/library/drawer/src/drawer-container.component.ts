@@ -118,7 +118,7 @@ export class TsDrawerContainerComponent implements AfterContentInit, DoCheck, On
   /**
    * Access the child content {@link TsDrawerContentComponent}
    */
-  @ContentChild(TsDrawerContentComponent, { static: false })
+  @ContentChild(TsDrawerContentComponent)
   public content!: TsDrawerContentComponent;
 
   /**

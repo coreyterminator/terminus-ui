@@ -106,14 +106,14 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
   /**
    * Access the template. Used by {@link TsSelectionListTriggerDirective}
    */
-  @ViewChild(TemplateRef, { static: false })
+  @ViewChild(TemplateRef)
   // tslint:disable-next-line no-any
   public template!: TemplateRef<any>;
 
   /**
    * Access the element for the panel containing the options
    */
-  @ViewChild('panel', { static: false })
+  @ViewChild('panel')
   public panel!: ElementRef;
 
   /**

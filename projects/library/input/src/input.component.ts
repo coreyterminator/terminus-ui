@@ -358,13 +358,13 @@ export class TsInputComponent implements
   /**
    * Expose reference to the Material datepicker component
    */
-  @ViewChild('picker', { static: false })
+  @ViewChild('picker')
   public picker!: MatDatepicker<string>;
 
   /**
    * Provide access to the input
    */
-  @ViewChild('inputElement', { static: false })
+  @ViewChild('inputElement')
   public inputElement!: ElementRef<HTMLInputElement>;
 
   /**

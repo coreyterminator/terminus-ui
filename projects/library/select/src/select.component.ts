@@ -468,37 +468,37 @@ export class TsSelectComponent implements
   /**
    * Access the user-supplied override of the trigger element
    */
-  @ContentChild(TsSelectTriggerComponent, { static: false })
+  @ContentChild(TsSelectTriggerComponent)
   public customTrigger: TsSelectTriggerComponent | undefined;
 
   /**
    * Access to the actual HTML element
    */
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   public inputElement!: ElementRef<HTMLInputElement>;
 
   /**
    * Access the label element
    */
-  @ViewChild('labelElement', { static: false })
+  @ViewChild('labelElement')
   public labelElement!: ElementRef;
 
   /**
    * Access the trigger that opens the select
    */
-  @ViewChild('trigger', { static: false })
+  @ViewChild('trigger')
   public trigger!: ElementRef;
 
   /**
    * Access the overlay pane containing the options
    */
-  @ViewChild(CdkConnectedOverlay, { static: false })
+  @ViewChild(CdkConnectedOverlay)
   public overlayDir!: CdkConnectedOverlay;
 
   /**
    * Access the panel containing the select options
    */
-  @ViewChild('panel', { static: false })
+  @ViewChild('panel')
   public panel!: ElementRef;
 
   /**

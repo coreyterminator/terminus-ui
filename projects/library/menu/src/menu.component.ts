@@ -101,7 +101,7 @@ export class TsMenuComponent implements AfterViewInit, OnInit {
   /**
    * Provide access to the trigger
    */
-  @ViewChild(MatMenuTrigger, { static: false })
+  @ViewChild(MatMenuTrigger)
   public trigger!: MatMenuTrigger;
 
   /**

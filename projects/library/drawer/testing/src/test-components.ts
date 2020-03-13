@@ -58,7 +58,7 @@ export class RegularDrawer {
   `,
 })
 export class SetSizeDrawer {
-  @ViewChild(TsDrawerComponent, { static: false }) public drawer!: TsDrawerComponent;
+  @ViewChild(TsDrawerComponent) public drawer!: TsDrawerComponent;
   public mode: TsDrawerModes = 'overlay';
   public position: TsDrawerPosition = 'start';
   public collapsedSize = '3rem';
@@ -93,13 +93,13 @@ export class BasicDrawer {
   public backdropClickedCount = 0;
   public hasBackdrop = true;
 
-  @ViewChild('drawer', { static: false })
+  @ViewChild('drawer')
   public drawer!: TsDrawerComponent;
-  @ViewChild('drawerButton', { static: false })
+  @ViewChild('drawerButton')
   public drawerButton!: ElementRef<HTMLButtonElement>;
-  @ViewChild('openButton', { static: false })
+  @ViewChild('openButton')
   public openButton!: ElementRef<HTMLButtonElement>;
-  @ViewChild('closeButton', { static: false })
+  @ViewChild('closeButton')
   public closeButton!: ElementRef<HTMLButtonElement>;
 
   public expand() {
@@ -165,7 +165,7 @@ export class MultipleDrawer {
   public drawer2Position: TsDrawerPosition = 'end';
   public mode: TsDrawerModes = 'push';
   public mode2: TsDrawerModes = 'overlay';
-  @ViewChild(TsDrawerContentComponent, { static: false })
+  @ViewChild(TsDrawerContentComponent)
   public drawerContent!: TsDrawerContentComponent;
 }
 
@@ -199,9 +199,9 @@ export class MultiDrawerSameSidePush {
     </ts-drawer-container>`,
 })
 export class SetMargins {
-  @ViewChild(TsDrawerComponent, { static: false })
+  @ViewChild(TsDrawerComponent)
   public drawer!: TsDrawerComponent;
-  @ViewChild(TsDrawerContentComponent, { static: false })
+  @ViewChild(TsDrawerContentComponent)
   public drawerContent!: TsDrawerContentComponent;
 
   public mode = 'push';

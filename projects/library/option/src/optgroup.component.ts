@@ -96,7 +96,7 @@ export class TsOptgroupComponent {
   /**
    * Access the checkbox instance
    */
-  @ViewChild(TsCheckboxComponent, { static: false })
+  @ViewChild(TsCheckboxComponent)
   public checkbox!: TsCheckboxComponent;
 
   /**

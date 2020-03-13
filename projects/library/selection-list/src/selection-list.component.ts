@@ -220,19 +220,19 @@ export class TsSelectionListComponent implements
   /**
    * Access the trigger
    */
-  @ViewChild(TsSelectionListTriggerDirective, { static: false })
+  @ViewChild(TsSelectionListTriggerDirective)
   public trigger!: TsSelectionListTriggerDirective;
 
   /**
    * Access the chip list
    */
-  @ViewChild('chipList', { static: false })
+  @ViewChild('chipList')
   public chipList: TsChipCollectionComponent | undefined;
 
   /**
    * Access the actual HTML <input> element
    */
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   public inputElement!: ElementRef<HTMLInputElement>;
 
   /**

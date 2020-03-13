@@ -234,19 +234,19 @@ export class TsAutocompleteComponent implements OnInit,
   /**
    * Access the trigger
    */
-  @ViewChild(TsAutocompleteTriggerDirective, { static: false })
+  @ViewChild(TsAutocompleteTriggerDirective)
   public autocompleteTrigger!: TsAutocompleteTriggerDirective;
 
   /**
    * Access the chip list
    */
-  @ViewChild('chipCollection', { static: false })
+  @ViewChild('chipCollection')
   public chipCollection: TsChipCollectionComponent | undefined;
 
   /**
    * Access the actual HTML element
    */
-  @ViewChild('input', { static: false })
+  @ViewChild('input')
   public inputElement!: ElementRef<HTMLInputElement>;
 
   /**
