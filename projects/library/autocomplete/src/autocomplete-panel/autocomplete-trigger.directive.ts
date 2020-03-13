@@ -11,7 +11,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectorRef,
   Directive,
-  ElementRef,
+  ElementRef, forwardRef,
   Host,
   Inject,
   InjectionToken,
@@ -22,7 +22,9 @@ import {
   Optional,
   ViewContainerRef,
 } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import {
+  ControlValueAccessor, NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { coerceBooleanProperty } from '@terminus/ngx-tools/coercion';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
@@ -76,9 +78,13 @@ export const AUTOCOMPLETE_PANEL_HEIGHT = 256;
 // Injection token that determines the scroll handling while the autocomplete panel is open
 export const TS_AUTOCOMPLETE_SCROLL_STRATEGY = new InjectionToken<() => ScrollStrategy>('mat-autocomplete-scroll-strategy');
 
-export function TS_AUTOCOMPLETE_SCROLL_STRATEGY_FACTORY(overlay: Overlay): () => ScrollStrategy {
-  return () => overlay.scrollStrategies.reposition();
-}
+/**
+ * Define a scroll strategy factory
+ *
+ * @param overlay
+ */
+export const TS_AUTOCOMPLETE_SCROLL_STRATEGY_FACTORY =
+  (overlay: Overlay): () => ScrollStrategy => () => overlay.scrollStrategies.reposition();
 
 export const TS_AUTOCOMPLETE_SCROLL_STRATEGY_FACTORY_PROVIDER = {
   provide: TS_AUTOCOMPLETE_SCROLL_STRATEGY,
@@ -119,7 +125,11 @@ let nextUniqueId = 0;
     '(keydown)': 'handleKeydown($event)',
   },
   providers: [
-    ControlValueAccessorProviderFactory<TsAutocompleteTriggerDirective>(TsAutocompleteTriggerDirective),
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TsAutocompleteTriggerDirective),
+      multi: true,
+    },
   ],
   exportAs: 'tsAutocompleteTrigger',
 })
@@ -259,6 +269,8 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * Whether the autocomplete is disabled. When disabled, the element will act as a regular input and the user won't be able to open the
    * panel.
+   *
+   * @param value
    */
   @Input('tsAutocompleteDisabled')
   public set autocompleteDisabled(value: boolean) {
@@ -280,6 +292,8 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
 
   /**
    * Define if the autocomplete panel should reopen after a selection is made
+   *
+   * @param value
    */
   @Input()
   public set reopenAfterSelection(value: boolean) {
@@ -580,6 +594,8 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
 
   /**
    * Clear any previous selected option and emit a selection change event for this option
+   *
+   * @param skip
    */
   private clearPreviousSelectedOption(skip: TsOptionComponent): void {
     this.autocompletePanel.options.forEach(option => {
@@ -628,7 +644,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * Return the connected element
    *
-   * @return The ElementRef
+   * @returns The ElementRef
    */
   private getConnectedElement(): ElementRef {
     return this.formField ? this.formField.getConnectedOverlayOrigin() : this.elementRef;
@@ -646,7 +662,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * Create a config for an overlay
    *
-   * @return The overlay config
+   * @returns The overlay config
    */
   private getOverlayConfig(): OverlayConfig {
     return new OverlayConfig({
@@ -663,7 +679,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * Get the overlay position strategy
    *
-   * @return The position strategy
+   * @returns The position strategy
    */
   private getOverlayPosition(): PositionStrategy {
     this.positionStrategy = this.overlay.position()
@@ -692,7 +708,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * Return the panel width
    *
-   * @return The width
+   * @returns The width
    */
   private getPanelWidth(): number | string {
     return this.getHostWidth();
@@ -787,7 +803,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * This method listens to a stream of panel closing actions and resets the stream every time the option list changes
    *
-   * @return The subscription
+   * @returns The subscription
    */
   public subscribeToClosingActions(): Subscription {
     const firstStable = this.ngZone.onStable.asObservable().pipe(take(1));
@@ -829,6 +845,5 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
     // refocused when they come back. In this case we want to skip the first focus event, if the
     // pane was closed, in order to avoid reopening it unintentionally.
     this.canOpenOnNextFocus = this.document.activeElement !== this.elementRef.nativeElement || this.panelOpen;
-  }
-
+  };
 }

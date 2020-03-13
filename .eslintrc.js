@@ -124,7 +124,7 @@ module.exports = {
     'curly': SEVERITY,
 
     // Variables that are declared and not used anywhere in the code are most likely an error due to incomplete refactoring.
-    'no-unused-vars': SEVERITY,
+    // 'no-unused-vars': SEVERITY,
 
     // For some libraries, importing the library directly can cause unused submodules to be loaded, so you may want to block these imports
     // and require that users directly import only the submodules they need. In other cases, you may simply want to ban an import because
@@ -348,9 +348,6 @@ module.exports = {
           SEVERITY,
           { allowNumber: true },
         ],
-
-        // It is redundant to provide an explicit type parameter equal to the default
-        '@typescript-eslint/no-unnecessary-type-arguments': SEVERITY,
 
         // Helps to maintain a consistent, readable style in the codebase.
         '@typescript-eslint/type-annotation-spacing': SEVERITY,

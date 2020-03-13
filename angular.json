@@ -254,15 +254,10 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/library/tsconfig.lib.json",
+            "tsConfig": "projects/library/tsconfig.json",
             "project": "projects/library/ng-package.json"
           }
-        ,          "configurations": {
-            "production": {
-              "tsConfig": "projects/library/tsconfig.lib.prod.json"
-            }
-          }
-},
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -275,7 +270,7 @@
           "options": {
             "eslintConfig": ".eslintrc.js",
             "tsConfig": [
-              "projects/library/tsconfig.lib.json",
+              "projects/library/tsconfig.json",
               "projects/library/tsconfig.spec.json"
             ],
             "exclude": [
