@@ -1,10 +1,5 @@
-// tslint:disable: no-non-null-assertion
 import {
   Component,
-  EventEmitter,
-  Input,
-  NgModule,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';

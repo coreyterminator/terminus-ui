@@ -5,6 +5,7 @@
     "rootDir": ".",
     "baseUrl": "",
     "experimentalDecorators": true,
+    "strictNullChecks": true,
     "types": []
   },
   "exclude": [

@@ -3,7 +3,6 @@ import {
   NgModule,
   ViewChild,
 } from '@angular/core';
-
 import {
   TsTooltipComponent,
   TsTooltipModule,
@@ -31,8 +30,8 @@ export class Basic {
   `,
 })
 export class TestHostComponent {
-  public hasUnderline: boolean;
-  public tooltipPosition: TsTooltipPositionTypes;
+  public hasUnderline!: boolean;
+  public tooltipPosition!: TsTooltipPositionTypes;
 
   @ViewChild(TsTooltipComponent)
   public tooltipComponent!: TsTooltipComponent;
@@ -47,7 +46,7 @@ export class TestHostComponent {
   `,
 })
 export class TooltipValue {
-  public tooltipValue: string;
+  public tooltipValue!: string;
 
   @ViewChild(TsTooltipComponent)
   public tooltipComponent!: TsTooltipComponent;

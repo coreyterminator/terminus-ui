@@ -5,7 +5,7 @@
   },
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "projects/demo",
+    "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "incremental": true,

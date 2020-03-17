@@ -1,4 +1,3 @@
-// tslint:disable: no-non-null-assertion no-use-before-declare component-class-suffix
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import {
   ElementRef,
@@ -20,7 +19,8 @@ import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { TsDocumentServiceMock } from '@terminus/ngx-tools/browser/testing';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
 import {
-  createComponent as createComponentInner, createFakeEvent,
+  createComponent as createComponentInner,
+  createFakeEvent,
   createKeyboardEvent,
   typeInElement,
 } from '@terminus/ngx-tools/testing';
@@ -28,11 +28,6 @@ import {
   TsFormFieldComponent,
   TsFormFieldModule,
 } from '@terminus/ui/form-field';
-import {
-  Observable,
-  Subject,
-} from 'rxjs';
-
 import * as TestComponents from '@terminus/ui/input/testing';
 // eslint-disable-next-line no-duplicate-imports
 import {
@@ -40,11 +35,15 @@ import {
   getInputInstance,
   sendInput,
 } from '@terminus/ui/input/testing';
+import {
+  Observable,
+  Subject,
+} from 'rxjs';
+
 import { TsInputModule } from './input.module';
 
 
 describe(`TsInputComponent`, function() {
-
   test(`should exist`, () => {
     const fixture = createComponent(TestComponents.SimpleFormControl);
     fixture.detectChanges();
@@ -54,7 +53,6 @@ describe(`TsInputComponent`, function() {
 
 
   describe(`autocomplete`, () => {
-
     test(`should emit valueChange if the value was updated for a datepicker`, () => {
       const fixture = createComponent(TestComponents.Autocomplete);
       const component = getInputInstance(fixture);
@@ -65,14 +63,11 @@ describe(`TsInputComponent`, function() {
 
       expect(component._valueChange.emit).toHaveBeenCalledWith(fixture.componentInstance.secondDate);
     });
-
   });
 
 
   describe(`input attributes`, () => {
-
     describe(`required`, () => {
-
       test(`should not be required by default`, () => {
         const fixture = createComponent(TestComponents.AttrNotRequired);
         fixture.detectChanges();
@@ -115,12 +110,10 @@ describe(`TsInputComponent`, function() {
 
         expect(el.getAttribute('required')).toEqual('');
       });
-
     });
 
 
     describe(`readOnly`, () => {
-
       test(`should add the correct attribute`, () => {
         const fixture = createComponent(TestComponents.AttrReadonly);
         fixture.detectChanges();
@@ -138,12 +131,10 @@ describe(`TsInputComponent`, function() {
 
         expect.assertions(4);
       });
-
     });
 
 
     describe(`spellcheck`, () => {
-
       test(`should add the correct attribute`, () => {
         const fixture = createComponent(TestComponents.AttrSpellcheck);
         fixture.detectChanges();
@@ -159,7 +150,6 @@ describe(`TsInputComponent`, function() {
         expect(component.spellcheck).toEqual(true);
         expect(el.getAttribute('spellcheck')).toEqual('true');
       });
-
     });
 
 
@@ -238,7 +228,6 @@ describe(`TsInputComponent`, function() {
 
 
     describe(`tabIndex`, () => {
-
       test(`should set the tabindex on the input`, () => {
         const fixture = createComponent(TestComponents.TabIndex);
         fixture.detectChanges();
@@ -246,12 +235,10 @@ describe(`TsInputComponent`, function() {
 
         expect(el.getAttribute('tabindex')).toEqual('4');
       });
-
     });
 
 
     describe(`theme`, () => {
-
       test(`should default to primary`, () => {
         const fixture = createComponent(TestComponents.SimpleFormControl);
         const input = fixture.componentInstance;
@@ -295,16 +282,12 @@ describe(`TsInputComponent`, function() {
         expect(input.inputComponent.theme).toEqual('warn');
         expect(formFieldEl.classList).toContain('ts-form-field--warn');
       });
-
     });
-
   });
 
 
   describe(`mask`, () => {
-
     describe(`set mask()`, () => {
-
       test(`should set the correct mask`, () => {
         const fixture = createComponent(TestComponents.Mask);
         fixture.componentInstance.mask = 'percentage';
@@ -339,12 +322,10 @@ describe(`TsInputComponent`, function() {
         expect(window.console.warn).toHaveBeenCalledWith(expect.stringContaining('TsInputComponent: '));
         expect(fixture.componentInstance.inputComponent.mask).toEqual('default');
       });
-
     });
 
 
     describe(`maskSanitizeValue`, () => {
-
       test(`should disable the sanitation of the model value`, () => {
         const fixture = createComponent(TestComponents.MaskSanitize);
         fixture.detectChanges();
@@ -378,12 +359,10 @@ describe(`TsInputComponent`, function() {
         expect(inputElement.value).toEqual('12.3%');
         expect(fixture.componentInstance.formControl.value).toEqual('12.3');
       });
-
     });
 
 
     describe(`maskAllowDecimal`, () => {
-
       test(`should allow the use of decimals within a number-based mask`, () => {
         const fixture = createComponent(TestComponents.MaskDecimal);
         fixture.detectChanges();
@@ -409,12 +388,10 @@ describe(`TsInputComponent`, function() {
         expect(inputElement.value).toEqual('1,234%');
         expect(fixture.componentInstance.formControl.value).toEqual('1234');
       });
-
     });
 
 
     describe(`maskDateFormat`, () => {
-
       test(`should format a masked date according to the default date mask`, function() {
         jest.useFakeTimers();
         const fixture = createComponent(TestComponents.MaskDateFormat);
@@ -432,12 +409,10 @@ describe(`TsInputComponent`, function() {
         expect.assertions(3);
         jest.runAllTimers();
       });
-
     });
 
 
     describe(`determinePostalMask`, () => {
-
       test(`should create the correct mask based on the value length`, () => {
         const fixture = createComponent(TestComponents.PostalMask);
         fixture.detectChanges();
@@ -450,28 +425,22 @@ describe(`TsInputComponent`, function() {
 
         expect(inputElement.value).toEqual('12345-6789');
       });
-
     });
-
   });
 
 
   describe(`formControl`, () => {
-
     test(`should fall back to a default form control`, () => {
       const fixture = createComponent(TestComponents.MissingFormControl);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.inputComponent.formControl instanceof FormControl).toBeTruthy();
     });
-
   });
 
 
   describe(`datepicker`, () => {
-
     describe(`startingView`, () => {
-
       test(`should allow the starting calendar view to be changed`, () => {
         const fixture = createComponent(TestComponents.StartingView);
         fixture.detectChanges();
@@ -490,12 +459,10 @@ describe(`TsInputComponent`, function() {
 
         expect.assertions(3);
       });
-
     });
 
 
     describe(`openTo`, () => {
-
       test(`should allow a Date or undefined`, () => {
         const fixture = createComponent(TestComponents.OpenTo);
         fixture.detectChanges();
@@ -508,12 +475,10 @@ describe(`TsInputComponent`, function() {
         expect(fixture.componentInstance.inputComponent.openTo).toBeUndefined();
         expect.assertions(2);
       });
-
     });
 
 
     describe(`minDate`, () => {
-
       test(`should set a minimum date with a string date, Date object, or undefined`, () => {
         const fixture = createComponent(TestComponents.MinMaxDate);
         fixture.detectChanges();
@@ -545,12 +510,10 @@ describe(`TsInputComponent`, function() {
 
         expect.assertions(6);
       });
-
     });
 
 
     describe(`dateFilter`, () => {
-
       test(`should set a filter for valid days of the week`, () => {
         const fixture = createComponent(TestComponents.DateFilter);
         const comp = fixture.componentInstance.inputComponent;
@@ -567,14 +530,11 @@ describe(`TsInputComponent`, function() {
 
         expect.assertions(3);
       });
-
     });
-
   });
 
 
   describe(`hideRequiredMarker`, () => {
-
     test(`should hide the required attr`, () => {
       const fixture = createComponent(TestComponents.AttrRequiredHidden);
       fixture.detectChanges();
@@ -587,12 +547,10 @@ describe(`TsInputComponent`, function() {
       marker = fixture.debugElement.query(By.css('.ts-form-field-required-marker'));
       expect(marker).toBeFalsy();
     });
-
   });
 
 
   describe(`set type()`, () => {
-
     test(`should log a warning if an unaccepted input type is passed in while using a mask and default to 'text'`, () => {
       window.console.warn = jest.fn();
 
@@ -622,12 +580,10 @@ describe(`TsInputComponent`, function() {
 
       expect(inputElement.getAttribute('autocomplete')).toEqual('on');
     });
-
   });
 
 
   describe(`isClearable`, () => {
-
     test(`should show the clearable button when valid`, () => {
       const fixture = createComponent(TestComponents.Clearable);
       fixture.componentInstance.cleared = jest.fn;
@@ -648,12 +604,10 @@ describe(`TsInputComponent`, function() {
       const clearButton = fixture.debugElement.query(By.css('.c-input__clear')).nativeElement;
       expect(clearButton).toBeTruthy();
     });
-
   });
 
 
   describe(`hasExternalFormField`, () => {
-
     test(`should not include form field HTML if set to true`, () => {
       const fixture = createComponent(TestComponents.NoExternalFormField);
       fixture.detectChanges();
@@ -666,12 +620,10 @@ describe(`TsInputComponent`, function() {
       container = fixture.debugElement.query(By.css('.ts-form-field__wrapper'));
       expect(container).toBeTruthy();
     });
-
   });
 
 
   describe(`hint`, () => {
-
     test(`should show/hide the container and output the text`, () => {
       const fixture = createComponent(TestComponents.Hint);
       fixture.detectChanges();
@@ -687,12 +639,10 @@ describe(`TsInputComponent`, function() {
       const contents = fixture.debugElement.query(By.css('.c-input__hint'));
       expect(contents.nativeElement.textContent).toEqual('foo');
     });
-
   });
 
 
   describe(`label`, () => {
-
     test(`should set the label and update the outline gap`, () => {
       jest.useFakeTimers();
       const fixture = createComponent(TestComponents.Label);
@@ -706,11 +656,7 @@ describe(`TsInputComponent`, function() {
       const formFieldInstance: TsFormFieldComponent = fixture.debugElement.query(By.css('.ts-form-field')).componentInstance;
       formFieldInstance.containerElement.nativeElement.getBoundingClientRect = jest.fn(() => bounding1);
       formFieldInstance.labelElement.nativeElement.children[0].getBoundingClientRect = jest.fn(() => bounding2);
-      Object.defineProperty(formFieldInstance.labelElement.nativeElement.children[0], 'offsetWidth', {
-        get() {
-          return 40;
-        },
-      });
+      Object.defineProperty(formFieldInstance.labelElement.nativeElement.children[0], 'offsetWidth', {get: () => 40,});
 
       formFieldInstance.updateOutlineGap();
       fixture.detectChanges();
@@ -721,14 +667,11 @@ describe(`TsInputComponent`, function() {
       expect(labelContent.innerHTML.trim()).toEqual('test label');
       jest.runAllTimers();
     });
-
   });
 
 
   describe(`initialization`, () => {
-
     describe(`AutofillMonitor`, () => {
-
       test(`should monitor the input for autofill and cleanup after ngOnDestroy`, fakeAsync(() => {
         const fixture = createComponent<TestComponents.Autofill>(TestComponents.Autofill);
         fixture.detectChanges();
@@ -746,12 +689,10 @@ describe(`TsInputComponent`, function() {
         instance.ngOnDestroy();
         expect(instance.autofillMonitor.stopMonitoring).toHaveBeenCalled();
       }));
-
     });
 
 
     describe(`fixIOSCaretBug`, () => {
-
       test(`should set the selectionRange on keyup`, () => {
         const fixture = createComponent(TestComponents.OnChanges);
         fixture.detectChanges();
@@ -764,12 +705,10 @@ describe(`TsInputComponent`, function() {
 
         expect(inputElement.setSelectionRange).toHaveBeenCalledTimes(2);
       });
-
     });
 
 
     describe(`ngOnChanges`, () => {
-
       test(`should re-initialize the mask for valid changes`, () => {
         const fixture = createComponent(TestComponents.OnChanges);
         fixture.detectChanges();
@@ -810,14 +749,11 @@ describe(`TsInputComponent`, function() {
 
         expect(formFieldInstance.updateOutlineGap).toHaveBeenCalled();
       });
-
     });
-
   });
 
 
   describe(`container click`, () => {
-
     test(`should focus the input`, () => {
       const fixture = createComponent(TestComponents.SimpleFormControl);
       fixture.detectChanges();
@@ -831,12 +767,10 @@ describe(`TsInputComponent`, function() {
 
       expect(document.activeElement).toBe(input);
     });
-
   });
 
 
   describe(`onBlur`, () => {
-
     test(`should trigger the onTouched callback and emit an event`, () => {
       const fixture = createComponent(TestComponents.OnChanges);
       fixture.detectChanges();
@@ -849,7 +783,6 @@ describe(`TsInputComponent`, function() {
       expect(component.onTouchedCallback).toHaveBeenCalled();
       expect(component.inputBlur.emit).toHaveBeenCalledWith('foo');
     });
-
   });
 
 
@@ -877,7 +810,6 @@ describe(`TsInputComponent`, function() {
 
 
   describe(`reset()`, () => {
-
     test(`should reset the input`, () => {
       const fixture = createComponent(TestComponents.Clearable);
       fixture.componentInstance.clearable = true;
@@ -898,12 +830,10 @@ describe(`TsInputComponent`, function() {
       expect(component.changeDetectorRef.markForCheck).toHaveBeenCalled();
       expect.assertions(4);
     });
-
   });
 
 
   describe(`writeValue`, () => {
-
     test(`should convert a date object to a string`, () => {
       const fixture = createComponent(TestComponents.SimpleFormControl);
       fixture.detectChanges();
@@ -917,12 +847,10 @@ describe(`TsInputComponent`, function() {
       expect(component.value.toISOString()).toEqual(isoDate);
       expect(component.renderer.setProperty).toHaveBeenCalledWith(expect.any(ElementRef), 'value', isoDate);
     });
-
   });
 
 
   describe(`onInput`, () => {
-
     test(`should emit the change if the date value has changed`, () => {
       const fixture = createComponent(TestComponents.DateFilter);
       const component = fixture.componentInstance.inputComponent;
@@ -969,14 +897,11 @@ describe(`TsInputComponent`, function() {
         fixture.destroy();
         expect(comp.changeDetectorRef.detectChanges).not.toHaveBeenCalled();
       });
-
     });
-
   });
 
 
   describe(`cleanValue()`, () => {
-
     test(`should use a regex returned by function if needed`, () => {
       const fixture = createComponent(TestComponents.SimpleFormControl);
       fixture.detectChanges();
@@ -993,12 +918,10 @@ describe(`TsInputComponent`, function() {
 
       expect(fixture.componentInstance.inputComponent.cleanValue('12.34%', regexFunction)).toEqual('12.34%');
     });
-
   });
 
 
   describe(`trimLastCharacter`, () => {
-
     test(`should return the value if no mask is set`, () => {
       const fixture = createComponent(TestComponents.SimpleFormControl);
       fixture.detectChanges();
@@ -1014,12 +937,10 @@ describe(`TsInputComponent`, function() {
 
       expect(fixture.componentInstance.inputComponent.trimLastCharacter('12.345')).toEqual('12.34');
     });
-
   });
 
 
   describe(`textarea`, () => {
-
     test(`should enable a textarea instead of a standard input`, () => {
       const fixture = createComponent(TestComponents.Textarea);
       fixture.detectChanges();
@@ -1040,7 +961,6 @@ describe(`TsInputComponent`, function() {
       fixture.detectChanges();
       expect(element.getAttribute('rows')).toEqual('7');
     });
-
   });
 
   describe(`inputPaste`, () => {
@@ -1060,7 +980,6 @@ describe(`TsInputComponent`, function() {
       expect(component.inputPaste.emit).toHaveBeenCalledWith(pasteEvent);
     });
   });
-
 });
 
 describe(`noValidationOrHint`, () => {
@@ -1079,9 +998,10 @@ describe(`noValidationOrHint`, () => {
  */
 
 
-function createComponent<T>(component: Type<T>): ComponentFixture<T> {
-
-  return createComponentInner<T>(
+/**
+ * @param component
+ */
+const createComponent<T> = (component: Type<T>): ComponentFixture<T> => createComponentInner<T>(
     component,
     [
       {
@@ -1101,7 +1021,6 @@ function createComponent<T>(component: Type<T>): ComponentFixture<T> {
       NoopAnimationsModule,
     ],
   );
-}
 
 
 /**
@@ -1112,9 +1031,7 @@ class MyDocumentService extends TsDocumentServiceMock {
   public shouldContain = true;
   public document: any = {
     documentElement: { contains: jest.fn(() => !!this.shouldContain) },
-    createEvent() {
-      return document.createEvent('Event');
-    },
+    createEvent: () => document.createEvent('Event'),
   };
 }
 

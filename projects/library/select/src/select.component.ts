@@ -1,4 +1,3 @@
-// tslint:disable: template-no-call-expression
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -29,7 +28,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { MAT_CHECKBOX_CLICK_ACTION } from '@angular/material/checkbox';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import {
   coerceArray,
@@ -242,8 +241,8 @@ const DEFAULT_VIEWPORT_MARGIN = 100;
     },
     // Since we handle all option selection/deselection functionality we tell the underlying MatCheckbox to do nothing on click.
     {
-      provide: MAT_CHECKBOX_CLICK_ACTION,
-      useValue: 'noop',
+      provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
+      useValue: { clickAction: 'noop' },
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -295,11 +294,6 @@ export class TsSelectComponent implements
    * The IDs of child options to be passed to the aria-owns attribute.
    */
   public optionIds = '';
-
-  /*
-   * Store the dimensions of the option
-   */
-  private optionRect: ClientRect | undefined;
 
   /**
    * Combined stream of all of the child options' change events
@@ -933,7 +927,7 @@ export class TsSelectComponent implements
         this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this.triggerFontSize}px`;
       }
 
-      this.optionRect = this.options.first.elementRef.nativeElement.getBoundingClientRect();
+      this.options.first.elementRef.nativeElement.getBoundingClientRect();
       this.calculateOverlayPosition();
     });
 
@@ -1377,9 +1371,8 @@ export class TsSelectComponent implements
 
     // If no value is selected we open the popup to the first item.
     // NOTE: Since we are checking the `empty` value first, we know that the selection model is not empty
-    // tslint:disable: no-non-null-assertion
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     let selectedOptionOffset = this.empty ? 0 : this.getOptionIndex(this.selectionModel.selected[0])!;
-    // tslint:enable: no-non-null-assertion
 
     // Make sure we take into account optgroups also
     selectedOptionOffset += countGroupLabelsBeforeOption(selectedOptionOffset, this.options, this.optionGroups);

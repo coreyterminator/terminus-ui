@@ -54,9 +54,8 @@ export class SelectComponent implements OnInit {
       },
     },
     {
-      // tslint:disable: max-line-length
+      // eslint-disable-next-line max-len
       foo: 'Consequuntur eum eveniet accusamus ea saepe. Alias occaecati eos reprehenderit expedita. Ab perferendis nemo molestias nulla est inventore voluptate.',
-      // tslint:enable: max-line-length
       /*
        *foo: 'Consequuntur eum eveniet accusamus ea saepe.',
        */

@@ -1,4 +1,3 @@
-// tslint:disable: no-implicit-dependencies
 export * from '@terminus/ui/autocomplete';
 export * from '@terminus/ui/autofocus';
 export * from '@terminus/ui/button';

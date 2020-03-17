@@ -50,7 +50,7 @@ export class TsTabComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Define a unique ID for every instance
    */
-  private id: number = nextUniqueId++;
+  public id: number = nextUniqueId++;
 
   /**
    * Portal that will be the hosted content of the tab
@@ -92,14 +92,14 @@ export class TsTabComponent implements OnInit, OnChanges, OnDestroy {
     read: TemplateRef,
     static: true,
   })
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public explicitContent: TemplateRef<any> | undefined;
 
   /**
    * Template inside the TsTabComponent view that contains an `<ng-content>`
    */
   @ViewChild(TemplateRef, { static: true })
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public implicitContent!: TemplateRef<any>;
 
   /**

@@ -6,16 +6,9 @@ import {
   TestBed,
 } from '@angular/core/testing';
 import { MatRippleModule } from '@angular/material/core';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  TsTabBodyComponent,
-  TsTabBodyHostDirective,
-  TsTabsModule,
-} from '@terminus/ui/tabs';
+import { TsTabsModule } from '@terminus/ui/tabs';
 import * as testComponents from '@terminus/ui/tabs/testing';
-
-
 
 
 describe(`TsTabBodyComponent`, function() {
@@ -40,7 +33,6 @@ describe(`TsTabBodyComponent`, function() {
 
 
   describe(`when initialized as center`, () => {
-
     beforeEach(() => {
       fixture = TestBed.createComponent(testComponents.TabBody);
     });
@@ -111,9 +103,5 @@ describe(`TsTabBodyComponent`, function() {
 
       expect(fixture.componentInstance.tabBody.positionState).toEqual('right');
     });
-
   });
-
-
-
 });

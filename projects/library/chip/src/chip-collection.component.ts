@@ -1,5 +1,3 @@
-// NOTE: A method must be used to dynamically format values for the UI
-// tslint:disable: template-no-call-expression
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -22,11 +20,14 @@ import {
 import { untilComponentDestroyed } from '@terminus/ngx-tools';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
 import {
-  merge,
   Observable,
-  Subscription,
+  scheduled,
 } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { asap } from 'rxjs/internal/scheduler/asap';
+import {
+  mergeAll,
+  startWith,
+} from 'rxjs/operators';
 
 import {
   TsChipComponent,
@@ -83,7 +84,7 @@ export class TsChipCollectionChange {
  */
 @Component({
   selector: 'ts-chip-collection',
-  templateUrl: `./chip-collection.component.html`,
+  templateUrl: './chip-collection.component.html',
   styleUrls: ['./chip-collection.component.scss'],
   host: {
     'class': 'ts-chip-collection',
@@ -109,26 +110,6 @@ export class TsChipCollectionChange {
   exportAs: 'tsChipCollection',
 })
 export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
-  /**
-   * Subscription to focus changes in the chips.
-   */
-  private chipFocusSubscription: Subscription | null = null;
-
-  /**
-   * Subscription to blur changes in the chips.
-   */
-  private chipBlurSubscription: Subscription | null = null;
-
-  /**
-   * Subscription to selection changes in chips.
-   */
-  private chipSelectionSubscription: Subscription | null = null;
-
-  /**
-   * Subscription to remove changes in chips.
-   */
-  private chipRemoveSubscription: Subscription | null = null;
-
   /**
    * Uid of the chip collection
    */
@@ -167,6 +148,13 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
   public keyManager!: FocusKeyManager<TsChipComponent>;
 
   /**
+   * Manage selections
+   *
+   * @internal
+   */
+  public selectionModel!: SelectionModel<TsChipComponent>;
+
+  /**
    * Function when touched
    *
    * @internal
@@ -181,19 +169,12 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
   public onChange: (value: string[]) => void = () => { };
 
   /**
-   * Manage selections
-   *
-   * @internal
-   */
-  public selectionModel!: SelectionModel<TsChipComponent>;
-
-  /**
    * Combined stream of all of the child chips' selection change events.
    *
    * @internal
    */
   public get chipSelectionChanges(): Observable<TsChipSelectionChange> {
-    return merge(...this.chips.map(chip => chip.selectionChange));
+    return scheduled([...this.chips.map(chip => chip.selectionChange)], asap).pipe(mergeAll());
   }
 
   /**
@@ -202,7 +183,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipFocusChanges(): Observable<TsChipEvent> {
-    return merge(...this.chips.map(chip => chip.onFocus));
+    return scheduled([...this.chips.map(chip => chip.onFocus)], asap).pipe(mergeAll());
   }
 
   /**
@@ -211,7 +192,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipBlurChanges(): Observable<TsChipEvent> {
-    return merge(...this.chips.map(chip => chip.blurred));
+    return scheduled([...this.chips.map(chip => chip.blurred)], asap).pipe(mergeAll());
   }
 
   /**
@@ -220,7 +201,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipDestroyChanges(): Observable<TsChipEvent> {
-    return merge(...this.chips.map(chip => chip.destroyed));
+    return scheduled([...this.chips.map(chip => chip.destroyed)], asap).pipe(mergeAll());
   }
 
   /**
@@ -253,6 +234,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Whether the user should be allowed to select multiple chips.
+   *
+   * @param value
    */
   @Input()
   public set allowMultipleSelections(value: boolean) {
@@ -272,6 +255,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Set and get chip collection id
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -284,6 +269,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Get and set disable state
+   *
+   * @param value
    */
   @Input()
   public set isDisabled(value: boolean) {
@@ -297,6 +284,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Get and set readonly state
+   *
+   * @param value
    */
   @Input()
   public set isReadonly(value: boolean) {
@@ -310,6 +299,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
   /**
    * Whether or not this chip collection is selectable. When a chip collection is not selectable,
    * all the chips are not selectable.
+   *
+   * @param value
    */
   @Input()
   public set isSelectable(value: boolean) {
@@ -329,6 +320,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Set and get tabindex
+   *
+   * @param value
    */
   @Input()
   public set tabIndex(value: number) {
@@ -342,6 +335,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
 
   /**
    * Set and get chip collection value
+   *
+   * @param value
    */
   @Input()
   public set value(value: string[]) {
@@ -512,7 +507,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * Utility to for whether input field is empty
    *
    * @param element - An HTMLElement
-   * @return boolean
+   * @returns boolean
    */
   private static isInputEmpty(element: HTMLElement): boolean {
     if (element && element.nodeName.toLowerCase() === 'input') {
@@ -557,8 +552,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * Emits change event to set the model value.
    */
   private propagateChanges(): void {
-    let valueToEmit: string | string[] = '';
-    valueToEmit = this.chips.map(chip => chip.value);
+    const valueToEmit = this.chips.map(chip => chip.value || '');
     this._value = valueToEmit;
     this.collectionChange.emit(new TsChipCollectionChange(this, valueToEmit));
     this.onChange(valueToEmit);
@@ -569,7 +563,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
   /**
    * Utility to ensure all indexes are valid.
    *
-   * @param index The index to be checked.
+   * @param index - The index to be checked.
    * @returns True if the index is valid for our collection of chips.
    */
   private isValidIndex(index: number): boolean {
@@ -591,7 +585,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * Listens to user-generated selection events on each chip.
    */
   private listenToChipsSelection(): void {
-    this.chipSelectionSubscription = this.chipSelectionChanges.subscribe(event => {
+    this.chipSelectionChanges.pipe(untilComponentDestroyed(this)).subscribe(event => {
       event.source.selected
         ? this.selectionModel.select(event.source)
         : this.selectionModel.deselect(event.source);
@@ -612,7 +606,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * Listens to user-generated selection events on each chip.
    */
   private listenToChipsFocus(): void {
-    this.chipFocusSubscription = this.chipFocusChanges.subscribe(event => {
+    this.chipFocusChanges.pipe(untilComponentDestroyed(this)).subscribe(event => {
       const chipIndex: number = this.chips.toArray().indexOf(event.chip);
 
       // istanbul ignore else
@@ -621,7 +615,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
       }
     });
 
-    this.chipBlurSubscription = this.chipBlurChanges.subscribe(() => {
+    this.chipBlurChanges.pipe(untilComponentDestroyed(this)).subscribe(() => {
       this.blur();
     });
   }
@@ -631,7 +625,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * Listens to remove events on each chip.
    */
   private listenToChipsRemoved(): void {
-    this.chipRemoveSubscription = this.chipDestroyChanges.subscribe(event => {
+    this.chipDestroyChanges.pipe(untilComponentDestroyed(this)).subscribe(event => {
       const chip = event.chip;
       const chipIndex = this.chips.toArray().indexOf(event.chip);
 
@@ -661,5 +655,4 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
       });
     }
   }
-
 }

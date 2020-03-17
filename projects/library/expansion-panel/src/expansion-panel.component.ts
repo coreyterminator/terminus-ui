@@ -26,20 +26,14 @@ import {
 import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { untilComponentDestroyed } from '@terminus/ngx-tools/utilities';
+import { Subject } from 'rxjs';
 import {
-  of,
-  scheduled,
-  Subject,
-} from 'rxjs';
-import {
-  concatAll,
   distinctUntilChanged,
   filter,
   startWith,
   take,
 } from 'rxjs/operators';
 
-import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   TS_ACCORDION,
   TsAccordionBase,
@@ -115,7 +109,7 @@ let nextUniqueId = 0;
   templateUrl: './expansion-panel.component.html',
   styleUrls: ['./expansion-panel.component.scss'],
   // NOTE: @Outputs are defined here rather than using decorators since we are extending the @Outputs of the base class
-  // tslint:disable-next-line:no-outputs-metadata-property
+  // eslint-disable-next-line @angular-eslint/no-outputs-metadata-property
   outputs: [
     'opened',
     'closed',
@@ -144,11 +138,6 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
    * Stream of body animation done events
    */
   public bodyAnimationDone = new Subject<AnimationEvent>();
-
-  /**
-   * A stored reference to the document
-   */
-  private readonly document: Document;
 
   /**
    * The ID for the associated trigger element. Used for a11y labelling.
@@ -184,8 +173,8 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
    * Determine whether the expansion panel's content contains the currently-focused element
    */
   public get contentContainsFocus(): boolean {
-    if (this.panelBody && this.document) {
-      const focusedElement = this.document.activeElement;
+    if (this.panelBody && this.documentService.document) {
+      const focusedElement = this.documentService.document.activeElement;
       const bodyElement = this.panelBody.nativeElement;
       return focusedElement === bodyElement || bodyElement.contains(focusedElement);
     }
@@ -207,6 +196,8 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
 
   /**
    * Determine if the toggle indicator should be hidden
+   *
+   * @param value
    */
   @Input()
   public set hideToggle(value: boolean) {
@@ -222,6 +213,8 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
    *
    * NOTE: CdkAccordionItem defines an input called `disabled`.
    * This alias is to conform to our existing naming convention.
+   *
+   * @param value
    */
   @Input()
   public set isDisabled(value: boolean) {
@@ -236,6 +229,8 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
    *
    * NOTE: CdkAccordionItem defines an input called `expanded`.
    * This alias is to conform to our existing naming convention.
+   *
+   * @param value
    */
   @Input()
   public set isExpanded(value: boolean) {
@@ -259,18 +254,17 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
 
 
   constructor(
-    @Optional() @SkipSelf() @Inject(TS_ACCORDION) accordion: TsAccordionBase,
-      _changeDetectorRef: ChangeDetectorRef,
-      _uniqueSelectionDispatcher: UniqueSelectionDispatcher,
+    _changeDetectorRef: ChangeDetectorRef,
+    protected _uniqueSelectionDispatcher: UniqueSelectionDispatcher,
     private _viewContainerRef: ViewContainerRef,
     private documentService: TsDocumentService,
+    @Optional() @SkipSelf() @Inject(TS_ACCORDION) accordion: TsAccordionBase,
     @Optional() @Inject(ANIMATION_MODULE_TYPE) public animationMode?: string,
-    @Inject(TS_EXPANSION_PANEL_DEFAULT_OPTIONS) @Optional() defaultOptions?: TsExpansionPanelDefaultOptions,
+    @Optional() @Inject(TS_EXPANSION_PANEL_DEFAULT_OPTIONS) defaultOptions?: TsExpansionPanelDefaultOptions,
   ) {
     super(accordion, _changeDetectorRef, _uniqueSelectionDispatcher);
 
     this.accordion = accordion;
-    this.document = documentService.document;
 
     // We need a Subject with distinctUntilChanged, because the `done` event fires twice on some browsers.
     // See https://github.com/angular/angular/issues/24084
@@ -301,8 +295,9 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
     // istanbul ignore else
     if (this.lazyContent) {
       // Render the content as soon as the panel becomes open.
-      scheduled([[of(null)], this.opened], asap).pipe(
-        concatAll(),
+      this.opened.pipe(
+        // eslint-disable-next-line deprecation/deprecation
+        startWith<void, null>(null),
         filter(() => this.expanded && !this.portal),
         take(1),
       ).subscribe(() => {
@@ -314,6 +309,8 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
 
   /**
    * Send any input changes through the Subject stream
+   *
+   * @param changes
    */
   public ngOnChanges(changes: SimpleChanges): void {
     this.inputChanges.next(changes);
@@ -327,5 +324,4 @@ export class TsExpansionPanelComponent extends CdkAccordionItem implements After
     super.ngOnDestroy();
     this.inputChanges.complete();
   }
-
 }

@@ -5,7 +5,6 @@ import { ComponentFixture } from '@angular/core/testing';
  *
  * @param fixture - the fixture with a tooltip
  */
-// tslint:disable-next-line:no-any
 export function getTooltipText(fixture: ComponentFixture<any>): string | null {
   fixture.componentInstance.tooltipComponent.showTooltip();
   fixture.detectChanges();

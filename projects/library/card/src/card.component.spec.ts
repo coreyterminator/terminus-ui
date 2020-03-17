@@ -5,7 +5,7 @@ import {
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { createComponent } from '@terminus/ngx-tools/testing';
-import { TsStyleThemeTypes } from '../../utilities/src/public-api';
+import { TsStyleThemeTypes } from '@terminus/ui/utilities';
 import {
   TsCardBorderOptions,
   TsCardComponent,

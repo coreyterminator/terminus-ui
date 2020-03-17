@@ -83,7 +83,7 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
   /**
    * Return the panel's scrollTop
    *
-   * @return The scrolltop number
+   * @returns The scrollTop number
    */
   public get scrollTop(): number {
     return this.panel ? this.panel.nativeElement.scrollTop : 0;
@@ -107,7 +107,7 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
    * Access the template. Used by {@link TsSelectionListTriggerDirective}
    */
   @ViewChild(TemplateRef)
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public template!: TemplateRef<any>;
 
   /**
@@ -125,11 +125,13 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
    * Function that maps an option's control value to its display value in the trigger
    */
   @Input()
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public displayWith: ((value: any) => string) | null = null;
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -197,6 +199,8 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
 
   /**
    * Emit the `select` event
+   *
+   * @param option
    */
   public emitSelectEvent(option: TsOptionComponent): void {
     const event = new TsSelectionListPanelSelectedEvent(this, option);
@@ -211,5 +215,4 @@ export class TsSelectionListPanelComponent implements AfterContentInit {
     this.showPanel = !!this.options.length;
     this.changeDetectorRef.markForCheck();
   }
-
 }

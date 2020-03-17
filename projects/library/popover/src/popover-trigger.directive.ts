@@ -17,7 +17,6 @@ import {
 } from '@angular/core';
 import {
   KEYS,
-  TsDocumentService,
   untilComponentDestroyed,
 } from '@terminus/ngx-tools';
 import { TsUILibraryError } from '@terminus/ui/utilities';
@@ -60,11 +59,6 @@ let nextUniqueId = 0;
   exportAs: 'tsPopoverTrigger',
 })
 export class TsPopoverTriggerDirective implements OnInit, OnDestroy, OnChanges, AfterContentInit, AfterContentChecked {
-  /**
-   * Store a reference to the document object
-   */
-  private document: Document;
-
   /**
    * Define the UID
    */
@@ -173,7 +167,6 @@ export class TsPopoverTriggerDirective implements OnInit, OnDestroy, OnChanges, 
     private changeDetectorRef: ChangeDetectorRef,
     private elementRef: ElementRef,
     private ngZone: NgZone,
-    private documentService: TsDocumentService,
   ) {
     /**
      * Listen to `keydown` events outside the zone so that change detection is not run every
@@ -190,8 +183,6 @@ export class TsPopoverTriggerDirective implements OnInit, OnDestroy, OnChanges, 
           event.preventDefault();
         }));
     });
-    this.document = this.documentService.document;
-
   }
 
   /**

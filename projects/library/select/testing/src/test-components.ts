@@ -1,4 +1,3 @@
-// tslint:disable: component-class-suffix
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -8,7 +7,6 @@ import {
   FormControl,
   FormsModule,
   ReactiveFormsModule,
-  Validator,
   Validators,
 } from '@angular/forms';
 import {
@@ -446,9 +444,7 @@ export class CustomDelimiter {
 export class SelectOptionChange {
   public myCtrl = new FormControl(['Texas', 'Florida']);
   public options: State[] = STATES.slice(0, 10);
-  // tslint:disable: max-line-length
   public myComparator: TsSelectSortComparatorFunction = (a: TsOptionComponent, b: TsOptionComponent, options: TsOptionComponent[]) => {
-    // tslint:enable: max-line-length
     const one = a.viewValue.toLowerCase();
     const two = b.viewValue.toLowerCase();
 
@@ -459,7 +455,7 @@ export class SelectOptionChange {
       return 1;
     }
     return 0;
-  }
+  };
 
   public updateOptions() {
     const otherStates: State[] = STATES.slice(10, 14);

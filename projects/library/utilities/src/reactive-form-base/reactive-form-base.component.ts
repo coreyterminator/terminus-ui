@@ -13,25 +13,21 @@ import { noop } from '@terminus/ngx-tools/utilities';
  * export class TsInputComponent extends TsReactiveFormBaseComponent {}
  */
 // NOTE: OnPush will be enabled in all classes that extend this class.
-// tslint:disable: prefer-on-push-component-change-detection
+// eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection,@angular-eslint/use-component-selector
 @Component({
-  /*
-   * NOTE: Without this dummy selector, this class isn't picked up by the docs generator
-   */
-  selector: `ts-dummy-selector`,
   template: ``,
 })
 export class TsReactiveFormBaseComponent {
   /**
    * Define the internal data model
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected innerValue: any = '';
 
   /**
    * Define placeholder for callback (provided later by the control value accessor)
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected onChangeCallback: (_: any) => void = noop;
 
   /**
@@ -47,15 +43,17 @@ export class TsReactiveFormBaseComponent {
 
   /**
    * Set the accessor and call the onchange callback
+   *
+   * @param v
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public set value(v: any) {
     if (v !== this.innerValue) {
       this.innerValue = v;
       this.onChangeCallback(v);
     }
   }
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public get value(): any {
     return this.innerValue;
   }
@@ -71,8 +69,10 @@ export class TsReactiveFormBaseComponent {
 
   /**
    * Register onChange callback (from ControlValueAccessor interface)
+   *
+   * @param fn
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected registerOnChange(fn: (_: any) => void) {
     this.onChangeCallback = fn;
   }
@@ -80,6 +80,8 @@ export class TsReactiveFormBaseComponent {
 
   /**
    * Register onTouched callback (from ControlValueAccessor interface)
+   *
+   * @param fn
    */
   protected registerOnTouched(fn: () => void) {
     this.onTouchedCallback = fn;
@@ -88,13 +90,14 @@ export class TsReactiveFormBaseComponent {
 
   /**
    * Write value to inner value (from ControlValueAccessor interface)
+   *
+   * @param value
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected writeValue(value: any) {
     // istanbul ignore else
     if (value !== this.innerValue) {
       this.innerValue = value;
     }
   }
-
 }

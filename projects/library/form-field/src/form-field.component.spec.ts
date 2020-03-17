@@ -15,22 +15,17 @@ import {
   createComponent as createComponentInner,
   createFakeEvent,
 } from '@terminus/ngx-tools/testing';
-
 import * as testComponents from '@terminus/ui/form-field/testing';
 import { TsInputModule } from '@terminus/ui/input';
+
 import { TsFormFieldModule } from './form-field.module';
-
-
-// tslint:disable: no-use-before-declare
 
 
 /**
  * NOTE: TsInputComponent tests cover much of the TsFormFieldComponent functionality
  */
 describe(`TsFormFieldComponent`, function() {
-
   describe(`id`, () => {
-
     test(`should allow custom IDs for accessibility`, () => {
       const fixture = createComponent(testComponents.Id);
       fixture.detectChanges();
@@ -48,7 +43,6 @@ describe(`TsFormFieldComponent`, function() {
 
       expect(labelElement.nativeElement.getAttribute('aria-owns')).toEqual(expect.stringContaining('ts-form-field-'));
     });
-
   });
 
 
@@ -68,19 +62,16 @@ describe(`TsFormFieldComponent`, function() {
 
 
   describe(`floatLabel`, () => {
-
     test(`should fallback to 'auto' if no value is passed in`, () => {
       const fixture = createComponent(testComponents.Float);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.formField.floatLabel).toEqual('auto');
     });
-
   });
 
 
   describe(`after content checked/init`, () => {
-
     test(`should throw an error if no control exists`, () => {
       const create = () => {
         const fixture = createComponent(testComponents.NoControl);
@@ -101,12 +92,10 @@ describe(`TsFormFieldComponent`, function() {
 
       expect(formField.updateOutlineGap).toHaveBeenCalled();
     });
-
   });
 
 
   describe(`updateOutlineGap`, () => {
-
     test(`should do nothing if no label element exists`, () => {
       const fixture = createComponent(testComponents.UpdateOutline);
       fixture.detectChanges();
@@ -132,24 +121,20 @@ describe(`TsFormFieldComponent`, function() {
       expect(formField.updateOutlineGap()).toEqual(undefined);
       expect(formField.outlineGapCalculationNeeded).toEqual(true);
     });
-
   });
 
 
   describe(`controlIsInErrorState`, () => {
-
     test(`should return error if dirty and validating on change`, () => {
       const fixture = createComponent(testComponents.ErrorState);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.formField.controlIsInErrorState).toEqual(true);
     });
-
   });
 
 
   describe(`getConnectedOverlayOrigin`, () => {
-
     test(`should fall back to elementRef if container is not found`, () => {
       const fixture = createComponent(testComponents.Float);
       fixture.detectChanges();
@@ -158,7 +143,6 @@ describe(`TsFormFieldComponent`, function() {
 
       expect(formField.getConnectedOverlayOrigin()).toEqual(formField.elementRef);
     });
-
   });
 
   describe(`noValidationOrHint`, () => {
@@ -198,12 +182,15 @@ describe(`TsFormFieldComponent`, function() {
     expect(formField.shouldAlwaysFloat).toBe(true);
     expect(formField.floatLabel).toBe('always');
   });
-
 });
 
 
-function createComponent<T>(component: Type<T>, providers: Provider[] = [], imports: any[] = []): ComponentFixture<T> {
-  return createComponentInner<T>(component,
+/**
+ * @param component
+ * @param providers
+ * @param imports
+ */
+const createComponent<T> = (component: Type<T>, providers: Provider[] = [], imports: any[] = []): ComponentFixture<T> => createComponentInner<T>(component,
     providers,
     [
       FormsModule,
@@ -212,13 +199,10 @@ function createComponent<T>(component: Type<T>, providers: Provider[] = [], impo
       TsInputModule,
       NoopAnimationsModule,
     ]);
-}
 
 class MyDocumentService extends TsDocumentServiceMock {
   public document: any = {
     documentElement: { contains: jest.fn(() => false) },
-    createEvent() {
-      return document.createEvent('Event');
-    },
+    createEvent: () => document.createEvent('Event'),
   };
 }

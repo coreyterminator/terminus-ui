@@ -13,8 +13,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { TsTableComponent } from './table.component';
-
 
 /**
  * Header template container that contains the cell outlet. Adds the right class and role.
@@ -81,7 +79,7 @@ export class TsRowComponent extends CdkRow {
     },
   ],
   // NOTE: @Inputs are defined here rather than using decorators since we are extending the @Inputs of the base class
-  // tslint:disable-next-line:no-inputs-metadata-property
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: [
     'columns: tsHeaderRowDef',
     'sticky: tsHeaderRowDefSticky',
@@ -109,7 +107,7 @@ export class TsHeaderRowDefDirective extends CdkHeaderRowDef {}
     },
   ],
   // NOTE: @Inputs are defined here rather than using decorators since we are extending the @Inputs of the base class
-  // tslint:disable-next-line:no-inputs-metadata-property
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: [
     'columns: tsRowDefColumns',
     'when: tsRowDefWhen',

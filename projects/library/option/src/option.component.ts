@@ -18,7 +18,6 @@ import {
   Output,
   QueryList,
   TemplateRef,
-  ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
@@ -204,7 +203,7 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
    * Optional template passed in by the consumer
    */
   @ContentChild(TemplateRef)
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public optionTemplate: TemplateRef<any> | undefined;
 
   /**
@@ -215,6 +214,8 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -227,6 +228,8 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
 
   /**
    * Whether the option is disabled
+   *
+   * @param value
    */
   @Input()
   public set isDisabled(value: boolean) {
@@ -239,6 +242,8 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
 
   /**
    * Define the option data object (needed for template support)
+   *
+   * @param value
    */
   @Input()
   public set option(value: TsOption | undefined) {
@@ -253,7 +258,7 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
    * The form value of the option
    */
   @Input()
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public value: any;
 
   /**
@@ -355,6 +360,8 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
 
   /**
    * Ensure the option is selected when activated from the keyboard
+   *
+   * @param event
    */
   public handleKeydown(event: KeyboardEvent): void {
     // istanbul ignore else
@@ -431,9 +438,10 @@ export class TsOptionComponent implements Highlightable, AfterContentInit, After
 
   /**
    * Emit the selection change event
+   *
+   * @param isUserInput
    */
   private emitSelectionChangeEvent(isUserInput = false): void {
     this.selectionChange.emit(new TsOptionSelectionChange(this, isUserInput));
   }
-
 }

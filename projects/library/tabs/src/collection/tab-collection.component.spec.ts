@@ -20,7 +20,6 @@ import {
 import * as testComponents from '@terminus/ui/tabs/testing';
 // eslint-disable-next-line no-duplicate-imports
 import {
-  checkSelectedIndex,
   getAllTabLabelElements,
   getSelectedContentElement,
   getSelectedLabelElement,
@@ -28,6 +27,8 @@ import {
   getTabCollectionInstance,
   getTabLabelElement,
 } from '@terminus/ui/tabs/testing';
+
+import { getTabCollectionDebugElement } from '../../testing/src/test-helpers';
 
 
 const IMPORTS = [
@@ -37,8 +38,30 @@ const IMPORTS = [
 ];
 
 
-describe(`TsTabCollectionComponent`, function() {
 
+/**
+ * Checks that:
+ * a) The `selectedIndex` has been updated
+ * b) The label and body have their respective `active` classes
+ *
+ * @param fixture - The component fixture
+ * @param expectedIndex - The index to use in the expect statement
+ */
+export function checkSelectedIndex(fixture: ComponentFixture<any>, expectedIndex: number): void {
+  fixture.detectChanges();
+
+  const collection: TsTabCollectionComponent = getTabCollectionDebugElement(fixture).componentInstance;
+  expect(collection.selectedIndex).toEqual(expectedIndex);
+
+  const tabLabelElement = fixture.debugElement.query(By.css(`.ts-tab-label:nth-of-type(${expectedIndex + 1})`)).nativeElement;
+  expect(tabLabelElement.classList.contains('ts-tab-label--active')).toEqual(true);
+
+  const tabContentElement = fixture.debugElement.query(By.css(`ts-tab-body:nth-of-type(${expectedIndex + 1})`)).nativeElement;
+  expect(tabContentElement.classList.contains('ts-tab-body--active')).toEqual(true);
+}
+
+
+describe(`TsTabCollectionComponent`, function() {
   describe(`basic behavior`, function() {
     let fixture: ComponentFixture<testComponents.Basic>;
     let element: HTMLElement;
@@ -266,17 +289,14 @@ describe(`TsTabCollectionComponent`, function() {
       expect(fixture.componentInstance.handleFocus).toHaveBeenCalledTimes(2);
       expect(fixture.componentInstance.handleFocus).toHaveBeenCalledWith(expect.objectContaining({ index: 0 }));
     });
-
   });
 
 
   describe(`basic`, function() {
-
     test(`should support a tab-group with the simple api`, fakeAsync(() => {
       const fixture = createComponent<testComponents.SimpleLabels>(testComponents.SimpleLabels, undefined, IMPORTS);
       fixture.detectChanges();
       const instance = getTabCollectionInstance(fixture);
-      const label = getTabLabelElement(fixture);
 
       expect(getSelectedLabelElement(fixture).textContent).toMatch('Foo');
       expect(getSelectedContentElement(fixture).textContent).toMatch('foo content');
@@ -294,7 +314,6 @@ describe(`TsTabCollectionComponent`, function() {
 
       expect(getSelectedLabelElement(fixture).textContent).toMatch('Baz');
       expect(getSelectedContentElement(fixture).textContent).toMatch('baz content');
-
     }));
 
 
@@ -334,7 +353,6 @@ describe(`TsTabCollectionComponent`, function() {
 
       expect(tabGroupNode.classList).toContain('ts-tab-collection--inverted-header');
     });
-
   });
 
 
@@ -381,12 +399,11 @@ describe(`TsTabCollectionComponent`, function() {
       expect(tab.getAttribute('aria-label')).toBe('Foo');
       expect(tab.hasAttribute('aria-labelledby')).toEqual(false);
     });
-
   });
 
 
   describe(`disable tabs`, () => {
-    let fixture: ComponentFixture<testComponents.DisabledTabsTestApp>;
+    let fixture: ComponentFixture<testComponents.DisabledTabs>;
 
     beforeEach(() => {
       fixture = createComponent<testComponents.DisabledTabs>(testComponents.DisabledTabs, undefined, IMPORTS);
@@ -410,7 +427,6 @@ describe(`TsTabCollectionComponent`, function() {
       expect(disabledLabels.length).toBe(1);
       expect(disabledLabels[0].nativeElement.getAttribute('aria-disabled')).toEqual('true');
     });
-
   });
 
 
@@ -551,7 +567,6 @@ describe(`TsTabCollectionComponent`, function() {
 
       expect(fixture.componentInstance.handleSelection).not.toHaveBeenCalled();
     }));
-
   });
 
 
@@ -574,7 +589,6 @@ describe(`TsTabCollectionComponent`, function() {
 
 
   describe(`lazy loaded tabs`, () => {
-
     test(`should lazy load the second tab`, fakeAsync(() => {
       const fixture = createComponent<testComponents.TemplateTabs>(testComponents.TemplateTabs, undefined, IMPORTS);
       fixture.detectChanges();
@@ -591,13 +605,11 @@ describe(`TsTabCollectionComponent`, function() {
       child = fixture.debugElement.query(By.css('.child'));
       expect(child.nativeElement).toBeDefined();
     }));
-
   });
 
 
   // NOTE: Jest doesn't render the element, so we need to test the height method directly
   describe(`setTabBodyWrapperHeight`, function() {
-
     test(`should set the height to tabBodyWrapperHeight if it exists`, () => {
       const fixture = createComponent<testComponents.DynamicHeight>(testComponents.DynamicHeight, undefined, IMPORTS);
       fixture.detectChanges();
@@ -606,7 +618,7 @@ describe(`TsTabCollectionComponent`, function() {
       expect(instance.setTabBodyWrapperHeight(10)).toEqual(undefined);
 
       // Set a fake existing height (would normally be set during initialization)
-      instance.tabBodyWrapperHeight = 50;
+      instance['tabBodyWrapperHeight'] = 50;
       fixture.detectChanges();
 
       instance.setTabBodyWrapperHeight(75);
@@ -622,36 +634,26 @@ describe(`TsTabCollectionComponent`, function() {
       fixture.detectChanges();
       const instance = getTabCollectionInstance(fixture);
       // Set a fake existing height (this would normally be set during initialization)
-      instance.tabBodyWrapperHeight = 50;
+      instance['tabBodyWrapperHeight'] = 50;
       fixture.detectChanges();
-
-
-      const bodyInstance = fixture.debugElement.query(By.css('.ts-tab-body')).componentInstance;
       Object.defineProperties(instance.tabBodyWrapper.nativeElement, { offsetHeight: { get: () => '80px' } });
-
       instance.setTabBodyWrapperHeight(75);
       fixture.detectChanges();
 
       const element = getTabBodyWrapperElement(fixture);
       expect(element.style.height).toEqual('75px');
     });
-
   });
 
 
   describe(`realignInkBar`, function() {
-
     test(`should call to align ink bar to selected tab`, function() {
       const fixture = createComponent<testComponents.Basic>(testComponents.Basic, undefined, IMPORTS);
-      const hostComponent = fixture.componentInstance;
       const instance = getTabCollectionInstance(fixture);
       instance.tabHeader.alignInkBarToSelectedTab = jest.fn();
       instance.realignInkBar();
 
       expect(instance.tabHeader.alignInkBarToSelectedTab).toHaveBeenCalled();
     });
-
   });
-
-
 });

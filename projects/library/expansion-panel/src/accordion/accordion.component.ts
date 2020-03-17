@@ -13,8 +13,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
-import { TsExpansionPanelComponent } from '../expansion-panel.component';
-import { TsExpansionPanelTriggerComponent } from './../trigger/expansion-panel-trigger.component';
+import { TsExpansionPanelTriggerComponent } from '../trigger/expansion-panel-trigger.component';
 import {
   TS_ACCORDION,
   TsAccordionBase,
@@ -49,7 +48,7 @@ import {
   selector: 'ts-accordion',
   template: `<ng-content></ng-content>`,
   // NOTE: @Inputs are defined here rather than using decorators since we are extending the @Inputs of the base class
-  // tslint:disable-next-line:no-inputs-metadata-property
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['multi'],
   providers: [
     {

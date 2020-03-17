@@ -186,14 +186,10 @@ export class TsLoginFormComponent implements OnChanges {
   /**
    * Emit an event on form submission
    */
-  // tslint:disable-next-line: no-output-native
   @Output()
   public readonly submission: EventEmitter<TsLoginFormResponse> = new EventEmitter();
 
 
-  /**
-   * Inject services
-   */
   constructor(
     private formBuilder: FormBuilder,
     private validatorsService: TsValidatorsService,

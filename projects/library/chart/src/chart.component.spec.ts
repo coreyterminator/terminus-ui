@@ -1,4 +1,3 @@
-// tslint:disable: no-use-before-declare component-class-suffix
 import {
   Provider,
   Type,
@@ -34,7 +33,6 @@ import { TsChartModule } from './chart.module';
 
 
 describe(`ChartComponent`, function() {
-
   test(`should exist`, () => {
     const fixture = createComponent<testComponents.SimpleHost>(testComponents.SimpleHost);
     fixture.detectChanges();
@@ -43,7 +41,6 @@ describe(`ChartComponent`, function() {
   });
 
   describe(`ngOnInit`, () => {
-
     test(`should call protectedInitialize`, () => {
       const fixture = createComponent<testComponents.SimpleHost>(testComponents.SimpleHost);
       fixture.componentInstance.component['protectedInitialize'] = jest.fn();
@@ -52,11 +49,9 @@ describe(`ChartComponent`, function() {
 
       expect(component['protectedInitialize']).toHaveBeenCalled();
     });
-
   });
 
   describe(`ngOnChanges`, () => {
-
     test(`should call protected initialize if the visualization changes`, () => {
       const fixture = createComponent<testComponents.VisualizationsHost>(testComponents.VisualizationsHost, []);
       const component = getChartInstance(fixture);
@@ -66,11 +61,9 @@ describe(`ChartComponent`, function() {
 
       expect(component['protectedInitialize']).toHaveBeenCalled();
     });
-
   });
 
   describe(`ngOnDestroy`, () => {
-
     test(`should call destroyChart`, () => {
       const fixture = createComponent<testComponents.SimpleHost>(testComponents.SimpleHost);
       fixture.detectChanges();
@@ -80,11 +73,9 @@ describe(`ChartComponent`, function() {
 
       expect(component['destroyChart']).toHaveBeenCalled();
     });
-
   });
 
   describe(`protectedInitialize`, () => {
-
     test(`should throw an error if the amCharts library wasn't passed in`, () => {
       expect.assertions(1);
       try {
@@ -105,12 +96,10 @@ describe(`ChartComponent`, function() {
 
       expect(component['createChart']).toHaveBeenCalled();
     }));
-
   });
 
 
   describe(`createChart`, () => {
-
     test(`should dispose of the chart if it exists`, fakeAsync(() => {
       const fixture = createComponent<testComponents.SimpleHost>(testComponents.SimpleHost);
       fixture.detectChanges();
@@ -145,11 +134,9 @@ describe(`ChartComponent`, function() {
         expect(window.console.warn).not.toHaveBeenCalled();
       }));
     }
-
   });
 
   describe(`visualization input`, () => {
-
     test(`should fall back to xy chart type if nothing is passed in`, () => {
       const fixture = createComponent<testComponents.VisualizationsHost>(testComponents.VisualizationsHost);
       fixture.detectChanges();
@@ -163,12 +150,10 @@ describe(`ChartComponent`, function() {
 
       expect(component.visualization).toEqual('xy');
     });
-
   });
 
   // TODO: Test types once we implement a tool to do so
   describe(`chart type coercion`, function() {
-
     test(`should validate xy chart`, function() {
       const chart = { className: 'XYChart' } as TsChart;
       expect(tsChartXYTypeCheck(chart)).toEqual(true);
@@ -209,9 +194,7 @@ describe(`ChartComponent`, function() {
       const chart = { className: 'ChordDiagram' } as TsChart;
       expect(tsChartChordTypeCheck(chart)).toEqual(true);
     });
-
   });
-
 });
 
 
@@ -227,8 +210,20 @@ const AM_CHARTS_PROVIDER: Provider[] = [{
 }];
 
 
-function createComponent<T>(component: Type<T>, providers: Provider[] = AM_CHARTS_PROVIDER, imports: any[] = []): ComponentFixture<T> {
-  return createComponentInner<T>(
+/**
+ * Create component
+ *
+ * @param component
+ * @param providers
+ * @param imports
+ * @returns The component fixture
+ */
+const createComponent =
+  <T>(
+    component: Type<T>,
+    providers: Provider[] = AM_CHARTS_PROVIDER,
+    imports: any[] = [],
+  ): ComponentFixture<T> => createComponentInner<T>(
     component,
     providers,
     [
@@ -236,4 +231,3 @@ function createComponent<T>(component: Type<T>, providers: Provider[] = AM_CHART
       ...imports,
     ],
   );
-}

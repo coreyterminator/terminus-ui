@@ -1,4 +1,3 @@
-// tslint:disable: template-no-call-expression
 // FIXME: Should refactor out all dangles and remove this rule:
 /* eslint-disable no-underscore-dangle */
 import { CdkColumnDef } from '@angular/cdk/table';
@@ -17,7 +16,9 @@ import { CanDisable } from '@angular/material/core';
 import { coerceBooleanProperty } from '@terminus/ngx-tools/coercion';
 import { isBoolean } from '@terminus/ngx-tools/type-guards';
 import { untilComponentDestroyed } from '@terminus/ngx-tools/utilities';
-import { merge } from 'rxjs';
+import { scheduled } from 'rxjs';
+import { asap } from 'rxjs/internal/scheduler/asap';
+import { mergeAll } from 'rxjs/operators';
 
 import { tsSortAnimations } from './sort-animations';
 import { getSortHeaderNotContainedWithinSortError } from './sort-errors';
@@ -46,7 +47,7 @@ import {
  */
 @Component({
   // NOTE: This component needs to be added to another component so we need a non-element selector
-  // tslint:disable: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[ts-sort-header]',
   // tslint:enable: component-selector
   templateUrl: './sort-header.component.html',
@@ -58,7 +59,7 @@ import {
   },
   preserveWhitespaces: false,
   // NOTE: @Inputs are defined here rather than using decorators since we are extending the @Inputs of the base class
-  // tslint:disable-next-line:no-inputs-metadata-property
+  // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
   inputs: ['disabled'],
   animations: [
     tsSortAnimations.indicator,
@@ -78,10 +79,9 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
    * the column's name.
    */
   // NOTE(B$): Renaming input so that we can pull a value from the primary directive
-  // tslint:disable: no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('ts-sort-header')
   public id!: string;
-  // tslint:enable: no-input-rename
 
   /**
    * Sets the position of the arrow that displays when sorted
@@ -97,6 +97,8 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
 
   /**
    * Overrides the disable clear value of the containing TsSort for this TsSortable
+   *
+   * @param value
    */
   @Input()
   public set disableClear(value: boolean) {
@@ -114,10 +116,7 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
   private _disableClear!: boolean;
 
 
-  /**
-   * Check for _sort and set up auto-change-detection
-   */
-  public constructor(
+  constructor(
     public _intl: TsSortHeaderIntl,
     private changeDetectorRef: ChangeDetectorRef,
     @Optional() public _sort: TsSortDirective,
@@ -126,13 +125,6 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
     if (!_sort && isDevMode()) {
       throw getSortHeaderNotContainedWithinSortError();
     }
-
-    // Mark directive for change detection after any of these changes
-    merge(_sort.sortChange, _sort._stateChanges, _intl.changes)
-      .pipe(
-        untilComponentDestroyed(this),
-      )
-      .subscribe(() => changeDetectorRef.markForCheck());
   }
 
 
@@ -140,6 +132,14 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
    * Default to cdk column name
    */
   public ngOnInit(): void {
+    // Mark directive for change detection after any of these changes
+    scheduled([this._sort.sortChange, this._sort._stateChanges, this._intl.changes], asap)
+      .pipe(
+        mergeAll(),
+        untilComponentDestroyed(this),
+      )
+      .subscribe(() => this.changeDetectorRef.markForCheck());
+
     if (!this.id && this._cdkColumnDef) {
       this.id = this._cdkColumnDef.name;
     }

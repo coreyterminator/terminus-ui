@@ -48,10 +48,8 @@ export class TsColumnDefDirective extends CdkColumnDef {
    * Define a unique name for this column
    */
   // NOTE: We must rename here so that the property matches the extended CdkColumnDef class
-  // tslint:disable: no-input-rename
   @Input('tsColumnDef')
   public name!: string;
-  // tslint:enable: no-input-rename
 
   /**
    * Define an alignment type for the cell.

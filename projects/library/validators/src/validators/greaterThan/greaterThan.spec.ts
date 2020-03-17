@@ -1,4 +1,3 @@
-// tslint:disable: no-non-null-assertion
 import {
   FormControl,
   ValidatorFn,
@@ -8,7 +7,6 @@ import { greaterThanValidator } from './greaterThan';
 
 
 describe(`greaterThanValidator`, function() {
-
   describe(`value input`, () => {
     let validatorFn: ValidatorFn;
     let validatorFnNoNumber: ValidatorFn;
@@ -55,7 +53,6 @@ describe(`greaterThanValidator`, function() {
       expect(result!.greaterThan.valid).toEqual(false);
       expect(result!.greaterThan.actual).toEqual(0);
     });
-
   });
 
 
@@ -107,7 +104,5 @@ describe(`greaterThanValidator`, function() {
       expect(result!.greaterThan.valid).toEqual(false);
       expect(result!.greaterThan.actual).toEqual(0);
     });
-
   });
-
 });

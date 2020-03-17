@@ -1,4 +1,3 @@
-// tslint:disable: template-no-call-expression
 import {
   AfterContentInit,
   ChangeDetectionStrategy,

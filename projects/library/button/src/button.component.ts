@@ -373,12 +373,10 @@ export class TsButtonComponent implements OnInit, OnDestroy {
     const isTheme = themeOptions.indexOf(classname) >= 0;
     const isFormat = formatOptions.indexOf(classname) >= 0;
     // NOTE: Underscore dangle name controlled by Material
-    /* eslint-disable no-underscore-dangle */
     // NOTE: This 'any' is needed since the `mat-raised-button` directive overwrites elementRef
     // NOTE: Need to check if button is already available (could be undefined during initialization)
-    // tslint:disable-next-line no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-underscore-dangle
     const buttonEl = this.button ? (this.button as any)._elementRef.nativeElement : null;
-    /* eslint-enable no-underscore-dangle */
     const themeClasses = themeOptions.map(theme => `c-button--${theme}`);
     const formatClasses = formatOptions.map(format => `c-button--${format}`);
 

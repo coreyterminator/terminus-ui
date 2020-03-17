@@ -8,19 +8,21 @@ import {
   ContentChildren,
   ElementRef,
   Input,
-  NgZone,
+  NgZone, OnDestroy,
   QueryList,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { untilComponentDestroyed } from '@terminus/ngx-tools';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { TS_SPACING } from '@terminus/ui/spacing';
 import { TsStyleThemeTypes } from '@terminus/ui/utilities';
 import {
   EMPTY,
   fromEvent,
-  merge,
+  scheduled,
 } from 'rxjs';
+import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   startWith,
   take,
@@ -92,7 +94,7 @@ const OUTLINE_GAP_PADDING = 5;
   encapsulation: ViewEncapsulation.None,
   exportAs: 'tsFormField',
 })
-export class TsFormFieldComponent implements AfterContentInit, AfterContentChecked, AfterViewInit {
+export class TsFormFieldComponent implements AfterContentInit, AfterContentChecked, AfterViewInit, OnDestroy {
   /**
    * Store a reference to the document object
    */
@@ -175,11 +177,13 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
    * NOTE: Using non-null-assertion as since the existence is verified by `confirmControlExists()`
    */
   @Input()
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public control!: TsFormFieldControl<any>;
 
   /**
    * Whether the label should always float or float as the user types
+   *
+   * @param value
    */
   @Input()
   public set floatLabel(value: 'always' | 'auto') {
@@ -202,6 +206,8 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
 
   /**
    * Define a hint for the input
+   *
+   * @param value
    */
   @Input()
   public set hint(value: string | undefined) {
@@ -214,6 +220,8 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -260,27 +268,27 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
     this.confirmControlExists();
 
     // Subscribe to changes in the child control state in order to update the form field UI.
-    // NOTE: non-null-assertion needed to pass `null` to `startWith`
-    // tslint:disable: no-non-null-assertion
-    this.control.stateChanges.pipe(startWith<void, null>(null!)).subscribe(() => {
+    // TODO: Refactor deprecation
+    // eslint-disable-next-line deprecation/deprecation
+    this.control.stateChanges.pipe(startWith<void, null>(null)).subscribe(() => {
       this.changeDetectorRef.markForCheck();
     });
-    // tslint:enable: no-non-null-assertion
 
     // Subscribe to changes in the child control state in order to update the form field UI.
     // istanbul ignore else
     if (this.control.labelChanges) {
-      // NOTE: non-null-assertion needed to pass `null` to `startWith`
-      // tslint:disable: no-non-null-assertion
-      this.control.labelChanges.pipe(startWith<void, null>(null!)).subscribe(() => {
+      // TODO: Refactor deprecation
+      // eslint-disable-next-line deprecation/deprecation
+      this.control.labelChanges.pipe(startWith<void, null>(null)).subscribe(() => {
         this.updateOutlineGap();
       });
-      // tslint:enable: no-non-null-assertion
     }
 
     // Run change detection if the value, prefix, or suffix changes.
     const valueChanges = (this.control.ngControl && this.control.ngControl.valueChanges) || EMPTY;
-    merge(valueChanges, this.prefixChildren.changes, this.suffixChildren.changes).subscribe(() => this.changeDetectorRef.markForCheck());
+    scheduled([valueChanges, this.prefixChildren.changes, this.suffixChildren.changes], asap)
+      .pipe(untilComponentDestroyed(this))
+      .subscribe(() => this.changeDetectorRef.markForCheck());
 
     this.ngZone.onStable.pipe(take(1)).subscribe(() => {
       this.ngZone.runOutsideAngular(() => this.updateOutlineGap());
@@ -307,7 +315,10 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
     this.changeDetectorRef.detectChanges();
   }
 
-
+  /**
+   * Needed for `untilComponentDestroyed`
+   */
+  public ngOnDestroy(): void {}
 
   /**
    * Throw an error if the form field's control is missing
@@ -341,6 +352,8 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
 
   /**
    * Determines whether a class from the NgControl should be forwarded to the host element
+   *
+   * @param prop
    */
   public shouldForward(prop: string): boolean {
     const ngControl = this.control ? this.control.ngControl /* istanbul ignore next - Unreachable */ : null;
@@ -417,5 +430,4 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
 
     this.outlineGapCalculationNeeded = false;
   }
-
 }

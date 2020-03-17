@@ -19,7 +19,6 @@ export type TsPaginatorPage
  * @param fixture - fixture
  * @param dir - direction: first, last, next or previous, to determine which button to click
  */
-// tslint:disable-next-line no-any
 export function clickToChangePage(fixture: ComponentFixture<any>, dir: TsPaginatorPage) {
   const buttonEl = fixture.debugElement.query(By.css(`.qa-paginator-${dir}-page-button .c-button`)).nativeElement as HTMLButtonElement;
   buttonEl.click();
@@ -33,7 +32,6 @@ export function clickToChangePage(fixture: ComponentFixture<any>, dir: TsPaginat
  * @param fixture - fixture
  * @param value - viewable string selected
  */
-// tslint:disable-next-line no-any
 export function updateRecordsPerPage(fixture: ComponentFixture<any>, value: string) {
   selectOption(fixture, value);
   return fixture.whenStable();
@@ -62,20 +60,4 @@ export function getPaginatorDebug(fixture: ComponentFixture<any>): DebugElement 
 export function getPaginatorInstance(fixture: ComponentFixture<any>): TsPaginatorComponent {
   const debug = getPaginatorDebug(fixture);
   return debug.componentInstance;
-}
-
-export function expectAllButtonsEnabled(fixture: ComponentFixture<any>) {
-  const firstPageButton =
-    fixture.debugElement.query(By.css(`.qa-paginator-first-page-button .c-button`)).nativeElement as HTMLButtonElement;
-  const previousPageButton =
-    fixture.debugElement.query(By.css(`.qa-paginator-previous-page-button .c-button`)).nativeElement as HTMLButtonElement;
-  const lastPageButton =
-    fixture.debugElement.query(By.css(`.qa-paginator-last-page-button .c-button`)).nativeElement as HTMLButtonElement;
-  const nextPageButton =
-    fixture.debugElement.query(By.css(`.qa-paginator-next-page-button .c-button`)).nativeElement as HTMLButtonElement;
-
-  expect(firstPageButton.disabled).toEqual(true);
-  expect(previousPageButton.disabled).toEqual(true);
-  expect(lastPageButton.disabled).toEqual(true);
-  expect(nextPageButton.disabled).toEqual(true);
 }

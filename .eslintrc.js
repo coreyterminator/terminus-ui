@@ -1,9 +1,10 @@
 const SEVERITY = 'error';
 
 module.exports = {
+  root: true,
   extends: [
-    'plugin:import/typescript',
     '@terminus/eslint-config-frontend/development',
+    'plugin:import/typescript',
   ],
   plugins: [
     // https://github.com/gund/eslint-plugin-deprecation
@@ -15,7 +16,12 @@ module.exports = {
     // https://github.com/TristonJ/eslint-plugin-prefer-arrow
     "prefer-arrow",
   ],
-  "rules": {
+  env: {
+    es6: true,
+    browser: true,
+    node: true,
+  },
+  'rules': {
     // Deprecated code should be refactored
     'deprecation/deprecation': SEVERITY,
 
@@ -57,7 +63,12 @@ module.exports = {
     // Helps to maintain a consistent, readable style in the codebase.
     'jsdoc/check-alignment': SEVERITY,
     'jsdoc/check-param-names': SEVERITY,
-    'jsdoc/check-tag-names': SEVERITY,
+    'jsdoc/check-tag-names': [
+      SEVERITY,
+      {
+        definedTags: ['internal']
+      },
+    ],
     'jsdoc/newline-after-description': SEVERITY,
     'jsdoc/require-hyphen-before-param-description': SEVERITY,
     'jsdoc/require-jsdoc': SEVERITY,
@@ -112,7 +123,14 @@ module.exports = {
     'import/no-unassigned-import': SEVERITY,
 
     // Helps to maintain a consistent, readable style in the codebase.
-    'quotes': [SEVERITY, 'single'],
+    'quotes': [
+      SEVERITY,
+      'single',
+      {
+        avoidEscape: true,
+        allowTemplateLiterals: true,
+      },
+    ],
 
     // Helps to maintain a consistent, readable style in the codebase.
     'comma-dangle': SEVERITY,
@@ -158,21 +176,17 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       parserOptions: {
         ecmaVersion: 2020,
-        sourceType: 'module',
         project: './tsconfig.json',
+        sourceType: 'module',
+        tsconfigRootDir: './',
       },
       settings: {
         'import/parsers': {
           '@typescript-eslint/parser': ['.ts'],
         },
         'import/resolver': {
-          typescript: {
-            alwaysTryTypes: true,
-            directory: [
-              'packages/library/tsconfig.lint.json',
-              'packages/library/tsconfig.spec.json',
-            ],
-          },
+          'node': true,
+          'eslint-import-resolver-typescript': true
         },
       },
 
@@ -191,7 +205,8 @@ module.exports = {
           SEVERITY,
           {
             type: 'element',
-            prefix: 'ts',
+            // TODO: change 'app' to 'vr'
+            prefix: ['ts', 'app', 'demo'],
             style: 'kebab-case',
           },
         ],
@@ -203,7 +218,8 @@ module.exports = {
           SEVERITY,
           {
             type: 'attribute',
-            prefix: 'ts',
+            // TODO: change 'app' to 'vr'
+            prefix: ['ts', 'app', 'demo'],
             style: 'camelCase',
           },
         ],
@@ -331,10 +347,22 @@ module.exports = {
         // Helps to maintain a consistent, readable style in the codebase.
         '@typescript-eslint/semi': SEVERITY,
 
+        // TODO Remove from real config
+        'indent': 'off',
         // Helps to maintain a consistent, readable style in the codebase.
         '@typescript-eslint/indent': [
           SEVERITY,
           2,
+          { CallExpression: {'arguments': 1} },
+        ],
+
+        'no-unused-expressions': 'off',
+        '@typescript-eslint/no-unused-expressions': [
+          SEVERITY,
+          {
+            'allowTernary': true,
+            'allowShortCircuit': true,
+          },
         ],
 
         // Warns for any two overloads that could be unified into one by using a union or an optional/rest parameter.
@@ -343,14 +371,12 @@ module.exports = {
         // For cases where the index is only used to read from the array being iterated, a for-of loop is easier to read and write.
         '@typescript-eslint/prefer-for-of': SEVERITY,
 
-        // Enforce template literal expressions to be of string type or number type
-        '@typescript-eslint/restrict-template-expressions': [
-          SEVERITY,
-          { allowNumber: true },
-        ],
-
         // Helps to maintain a consistent, readable style in the codebase.
         '@typescript-eslint/type-annotation-spacing': SEVERITY,
+
+        // NOTE: UI only
+        // For performance, prefer OnPush
+        '@angular-eslint/prefer-on-push-component-change-detection': SEVERITY,
       },
     },
 
@@ -373,7 +399,9 @@ module.exports = {
         // Sass test file:
         'test-sass.js',
         // Test helper files:
-        'test-*.ts',
+        'test-helpers.ts',
+        // Test component files:
+        'test-components.ts',
       ],
       env: {
         jest: true,
@@ -387,6 +415,24 @@ module.exports = {
         'no-magic-numbers': 'off',
         'no-underscore-dangle': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
+        '@angular-eslint/component-selector': 'off',
+        '@angular-eslint/directive-selector': 'off',
+        '@angular-eslint/component-class-suffix': 'off',
+        '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+        '@angular-eslint/use-component-selector': 'off',
+        '@angular-eslint/component-max-inline-declarations': 'off',
+        '@typescript-eslint/explicit-member-accessibility': 'off',
+      },
+    },
+
+    // Demo project
+    {
+      files: [
+        'projects/demo/**/*.ts',
+      ],
+      rules: {
+        '@typescript-eslint/explicit-member-accessibility': 'off',
+        '@typescript-eslint/member-ordering': 'off',
       },
     },
   ],

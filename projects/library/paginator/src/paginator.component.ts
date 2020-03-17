@@ -1,4 +1,3 @@
-// tslint:disable: template-no-call-expression
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -190,6 +189,8 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
 
   /**
    * Define the current page
+   *
+   * @param page
    */
   @Input()
   public set currentPageIndex(page: number) {
@@ -226,6 +227,8 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
 
   /**
    * Define the total number of records
+   *
+   * @param records
    */
   @Input()
   public set totalRecords(records: number) {
@@ -386,7 +389,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * Check if a page is the first page
    *
    * @param page - The number of the current page
-   * @return A boolean representing if this is the first page
+   * @returns A boolean representing if this is the first page
    */
   public isFirstPage(page: number): boolean {
     return coerceNumberProperty(page) === this.firstPageIndex;
@@ -397,7 +400,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * Check if a page is the last page
    *
    * @param page - The number of the current page
-   * @return A boolean representing if this is the last page
+   * @returns A boolean representing if this is the last page
    */
   public isLastPage(page: number): boolean {
     if (this.pagesArray) {
@@ -410,7 +413,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * Check if the next button is disabled
    *
    * @param page - The number of the current page
-   * @return A boolena representing if the button is disabled.
+   * @returns A boolena representing if the button is disabled.
    */
   public isNextButtonDisabled(page: number): boolean {
     if (this.isNextDisabled === undefined) {
@@ -425,7 +428,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * @param message - The help message when too many results are returned
    * @param max - The max number of records before the message should be shown
    * @param totalRecords - The number of records
-   * @return A boolean representing if the message should be shown
+   * @returns A boolean representing if the message should be shown
    */
   public shouldShowRecordsMessage(message: string, max: number, totalRecords: number): boolean {
     if (totalRecords > max) {
@@ -453,7 +456,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * Determine if the page select menu should be disabled
    *
    * @param pagesCount - The number of pages
-   * @return A boolean representing if the menu should be disabled
+   * @returns A boolean representing if the menu should be disabled
    */
   public menuIsDisabled(pagesCount: number): boolean {
     const moreThanOne = 2;
@@ -467,7 +470,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * @param totalRecords - The total number of records
    * @param recordsPerPageChoices - The array of counts representing how many records may be show
    * per page
-   * @return A boolean representing if the records select should be disabled
+   * @returns A boolean representing if the records select should be disabled
    */
   public disableRecordsPerPage(totalRecords: number, recordsPerPageChoices: number[]): boolean {
     const lowestPerPage: number = Math.min.apply(Math, recordsPerPageChoices);
@@ -481,7 +484,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * @param currentPage - The current page
    * @param pages - The array of all pages
    * @param totalRecords - The number of total records
-   * @return The string to use as the current page label
+   * @returns The string to use as the current page label
    */
   private createCurrentPageLabel(
     currentPage: number,
@@ -519,7 +522,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    *
    * @param currentPage - The current page
    * @param totalRecords - The number of total records
-   * @return The string to use as the current page label
+   * @returns The string to use as the current page label
    */
   private createDefaultPageLabel(
     currentPage: number,
@@ -544,7 +547,7 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    * @param total - The total records remaining
    * @param perPage - How many records are shown per page
    * @param zeroBased - If the pages are based on a `0` index rather than `1`
-   * @return The array representing all possible pages of records
+   * @returns The array representing all possible pages of records
    */
   private createPagesArray(total: number, perPage: number, zeroBased: boolean): TsPaginatorMenuItem[] {
     const paginatorArray: TsPaginatorMenuItem[] = [];
@@ -578,7 +581,6 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
       if (recordsRemaining >= perPage) {
         page = pageValue + 1;
       }
-
     }
 
     // If any records remain, add the partial group as the last page in the array
@@ -616,10 +618,9 @@ export class TsPaginatorComponent implements OnChanges, AfterViewInit {
    *
    * @param index - The current index
    * @param page - The page object
-   * @return The value to be used
+   * @returns The value to be used
    */
   public trackPagesArray(index: number, page: TsPaginatorMenuItem): string | undefined {
     return page ? page.name : undefined;
   }
-
 }

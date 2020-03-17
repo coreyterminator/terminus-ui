@@ -48,7 +48,6 @@ export class Basic {
       ></ts-cohort-date-range>
   `,
 })
-// tslint:disable-next-line:component-class-suffix
 export class Standard {
   public date1 = new Date(2018, 1, 1);
   public date2 = new Date(2018, 2, 1);
@@ -70,7 +69,6 @@ export class Standard {
     ></ts-cohort-date-range>
   `,
 })
-// tslint:disable-next-line:component-class-suffix
 export class DefaultCohort {
   public date1 = new Date(2018, 1, 1);
   public date2 = new Date(2018, 2, 1);
@@ -103,7 +101,6 @@ export class DefaultCohort {
     ></ts-cohort-date-range>
   `,
 })
-// tslint:disable-next-line:component-class-suffix
 export class NoCustomDates {
   public date1 = new Date(2018, 1, 1);
   public date2 = new Date(2018, 2, 1);
@@ -126,7 +123,6 @@ export class NoCustomDates {
     ></ts-cohort-date-range>
   `,
 })
-// tslint:disable-next-line:component-class-suffix
 export class NoCohorts {}
 
 export type TsCohortDateRangeTestComponent

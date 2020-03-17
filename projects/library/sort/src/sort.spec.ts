@@ -1,4 +1,3 @@
-// tslint:disable: component-class-suffix
 import {
   CollectionViewer,
   DataSource,
@@ -48,6 +47,10 @@ import { TsSortModule } from './sort.module';
  * Performs a sequence of sorting on a single column to see if the sort directions are
  * consistent with expectations. Detects any changes in the fixture to reflect any changes in
  * the inputs and resets the TsSort to remove any side effects from previous tests.
+ *
+ * @param fixture
+ * @param expectedSequence
+ * @param id
  */
 function testSingleColumnSortDirectionSequence(
   fixture: ComponentFixture<SimpleTsSortApp>,
@@ -188,7 +191,7 @@ class CdkTableTsSortApp {
         <td ts-cell *tsCellDef="let row">{{ row.c }}</td>
       </ng-container>
       <tr ts-header-row *tsHeaderRowDef="columnsToRender"></tr>
-      <tr ts-row *tsRowDef="let row; columns: columnsToRenderrt"></tr>
+      <tr ts-row *tsRowDef="let row; columns: columnsToRender"></tr>
     </table>
   `,
 })
@@ -273,7 +276,7 @@ describe('TsSort', () => {
 
 
   test('should have the sort headers register and deregister themselves', () => {
-    const sortables = component.tsSort.sortables;
+    const sortables = component.tsSort['sortables'];
     expect(sortables.size).toBe(4);
     expect(sortables.get('defaultSortHeaderA')).toBe(component.tsSortHeaderDefaultA);
     expect(sortables.get('defaultSortHeaderB')).toBe(component.tsSortHeaderDefaultB);
@@ -418,15 +421,15 @@ describe('TsSort', () => {
 
   test('should allow let TsSortable override the default sort parameters', () => {
     testSingleColumnSortDirectionSequence(
-      fixture, ['asc', 'desc', '']
+      fixture, ['asc', 'desc', ''],
     );
 
     testSingleColumnSortDirectionSequence(
-      fixture, ['desc', 'asc', ''], 'overrideStart'
+      fixture, ['desc', 'asc', ''], 'overrideStart',
     );
 
     testSingleColumnSortDirectionSequence(
-      fixture, ['asc', 'desc'], 'overrideDisableClear'
+      fixture, ['asc', 'desc'], 'overrideDisableClear',
     );
   });
 
@@ -435,5 +438,4 @@ describe('TsSort', () => {
     const button = fixture.nativeElement.querySelector('#defaultSortHeaderA button');
     expect(button.getAttribute('aria-label')).toBe('Change sorting for defaultSortHeaderA');
   });
-
 });

@@ -1,26 +1,18 @@
-// tslint:disable: component-class-suffix
-import { CommonModule } from '@angular/common';
 import {
   Component,
   NgModule,
   ViewChild,
 } from '@angular/core';
 import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { TsMenuModule } from '@terminus/ui/menu';
-import {
   TsPaginatorComponent,
   TsPaginatorModule,
 } from '@terminus/ui/paginator';
-import { TsSelectModule } from '@terminus/ui/select';
 
 
 @Component({ template: `<ts-paginator></ts-paginator>` })
 export class Basic {
   @ViewChild(TsPaginatorComponent, { static: true })
-  public paginatorComponent: TsPaginatorComponent;
+  public paginatorComponent!: TsPaginatorComponent;
 }
 
 

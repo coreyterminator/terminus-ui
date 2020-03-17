@@ -1,6 +1,3 @@
-// TODO: Can we refactor non-null-assertion?
-// https://github.com/GetTerminus/terminus-ui/issues/1491
-// tslint:disable: no-non-null-assertion
 /* eslint-disable no-underscore-dangle */
 import { DataSource } from '@angular/cdk/table';
 import {
@@ -41,6 +38,8 @@ export class TsTableDataSource<T> implements DataSource<T> {
 
   /**
    * Array of data that should be rendered by the table, where each object represents one row.
+   *
+   * @param data
    */
   public set data(data: T[]) {
     this._data.next(data);
@@ -52,6 +51,8 @@ export class TsTableDataSource<T> implements DataSource<T> {
 
   /**
    * Set up data and change subscriptions
+   *
+   * @param initialData
    */
   constructor(initialData: T[] = []) {
     this._data = new BehaviorSubject<T[]>(initialData);
@@ -88,5 +89,4 @@ export class TsTableDataSource<T> implements DataSource<T> {
    * Used by the {@link TsTableComponent}. Called when it is destroyed. No-op.
    */
   public disconnect() {}
-
 }

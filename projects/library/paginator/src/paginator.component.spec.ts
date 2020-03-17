@@ -10,12 +10,31 @@ import { createComponent as createComponentInner } from '@terminus/ngx-tools/tes
 import * as TestComponents from '../testing/src/test-components';
 import {
   clickToChangePage,
-  expectAllButtonsEnabled,
   getPaginatorInstance,
   updateRecordsPerPage,
 } from '../testing/src/test-helpers';
 import { TsPaginatorMenuItem } from './paginator.component';
 import { TsPaginatorModule } from './paginator.module';
+
+
+/**
+ * @param fixture
+ */
+function expectAllButtonsEnabled(fixture: ComponentFixture<any>) {
+  const firstPageButton =
+    fixture.debugElement.query(By.css(`.qa-paginator-first-page-button .c-button`)).nativeElement as HTMLButtonElement;
+  const previousPageButton =
+    fixture.debugElement.query(By.css(`.qa-paginator-previous-page-button .c-button`)).nativeElement as HTMLButtonElement;
+  const lastPageButton =
+    fixture.debugElement.query(By.css(`.qa-paginator-last-page-button .c-button`)).nativeElement as HTMLButtonElement;
+  const nextPageButton =
+    fixture.debugElement.query(By.css(`.qa-paginator-next-page-button .c-button`)).nativeElement as HTMLButtonElement;
+
+  expect(firstPageButton.disabled).toEqual(true);
+  expect(previousPageButton.disabled).toEqual(true);
+  expect(lastPageButton.disabled).toEqual(true);
+  expect(nextPageButton.disabled).toEqual(true);
+}
 
 
 // FIXME: Tests should not rely on QA* classes
@@ -136,7 +155,6 @@ describe(`TsPaginatorComponent`, function() {
       expect(lastPageBut.disabled).toEqual(true);
       expect(nextPageBut.disabled).toEqual(true);
     }));
-
   });
 
   describe(`current page menu`, () => {
@@ -242,7 +260,6 @@ describe(`TsPaginatorComponent`, function() {
   });
 
   describe(`isZeroBased`, () => {
-
     test(`should be zero-based by default`, () => {
       const fixture = createComponent(TestComponents.Basic);
       fixture.detectChanges();
@@ -283,7 +300,6 @@ describe(`TsPaginatorComponent`, function() {
 
 
   describe(`recordCountTooHighMessage`, () => {
-
     test(`should not display message when totalRecords is less than maxPreferredRecords`, () => {
       const fixture = createComponent(TestComponents.RecordsPerPage);
       const instance = getPaginatorInstance(fixture);
@@ -334,11 +350,9 @@ describe(`TsPaginatorComponent`, function() {
    * paginator: https://github.com/GetTerminus/terminus-ui/issues/1512
    */
   describe(`tooltips`, () => {
-
     test.todo(`should display default tooltips by default`);
 
     test.todo(`should update tooltips if set`);
-
   });
 
   describe(`simple mode`, () => {
@@ -400,23 +414,17 @@ describe(`TsPaginatorComponent`, function() {
       const btn = fixture.debugElement.query(By.css('.qa-paginator-next-page-button'));
       expect(btn.nativeElement.querySelector('button').disabled).toBeTruthy();
     }));
-
   });
-
 });
 
 
 /**
- * HELPERS
+ * @param component
  */
-
-function createComponent<T>(component: Type<T>): ComponentFixture<T> {
-
-  return createComponentInner<T>(
-    component,
-    undefined,
-    [
-      TsPaginatorModule,
-    ],
-  );
-}
+const createComponent = <T>(component: Type<T>): ComponentFixture<T> => createComponentInner<T>(
+  component,
+  undefined,
+  [
+    TsPaginatorModule,
+  ],
+);

@@ -1,5 +1,3 @@
-// NOTE: Our templates need to call a method to use the formatter functions
-// tslint:disable: template-no-call-expression
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -30,7 +28,6 @@ import {
  * Define the allowed keys for an item passed to the {@link TsRadioComponent}
  */
 export interface TsRadioOption {
-  // tslint:disable-next-line no-any
   [key: string]: any;
 
   /**
@@ -53,7 +50,6 @@ export class TsRadioChange {
     // The group that emit the change event
     public source: TsRadioGroupComponent,
     // The value of the TsRadioButton
-    // tslint:disable-next-line:no-any
     public value: any,
   ) {}
 }
@@ -125,7 +121,7 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
   }
 
   // NOTE: Since we are matching standard HTML attributes, we will rename for internal use.
-  // tslint:disable: no-input-rename
+  // eslint:disable: @angular-eslint/no-input-rename
   /**
    * Used to set the 'aria-label' attribute on the underlying input element.
    */
@@ -143,7 +139,7 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
    */
   @Input('aria-describedby')
   public ariaDescribedby: string | undefined;
-  // tslint:enable: no-input-rename
+  // eslint:enable: @angular-eslint/no-input-rename
 
   /**
    * Define if the radio contents should be centered (used with the visual radio group layout)
@@ -153,6 +149,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * Define a function to retrieve the UI value for an option
+   *
+   * @param value
    */
   @Input()
   public set formatUILabelFn(value: TsRadioFormatFn) {
@@ -173,6 +171,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * Define a function to retrieve the UI value for an option
+   *
+   * @param value
    */
   @Input()
   public set formatUISubLabelFn(value: TsRadioFormatFn) {
@@ -193,6 +193,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * Define a function to retrieve the UI value for an option
+   *
+   * @param value
    */
   @Input()
   public set formatModelValueFn(value: TsRadioFormatFn) {
@@ -213,6 +215,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -243,6 +247,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * The HTML name attribute applied to radio buttons in this group.
+   *
+   * @param value
    */
   @Input()
   public set name(value: string) {
@@ -262,6 +268,8 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
 
   /**
    * Accept an array of radio options in the {@link TsRadioOption} format
+   *
+   * @param value
    */
   @Input()
   public set options(value: TsRadioOption[]) {
@@ -313,7 +321,7 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
         .pipe(
           untilComponentDestroyed(this),
         )
-        // tslint:disable-next-line no-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .subscribe((v: any) => {
           this.writeValue(v);
           this.changeDetectorRef.markForCheck();
@@ -333,7 +341,7 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
    *
    * @param option - The radio option
    * @param formatter - The formatter function used to retrieve the value
-   * @return The retrieved value
+   * @returns The retrieved value
    */
   public retrieveValue(option: TsRadioOption, formatter?: TsRadioFormatFn): TsRadioOption | string {
     return (formatter && formatter(option)) ? formatter(option) : option;
@@ -367,10 +375,9 @@ export class TsRadioGroupComponent extends TsReactiveFormBaseComponent implement
    * Function for tracking for-loops changes
    *
    * @param index - The item index
-   * @return The unique ID
+   * @returns The unique ID
    */
   public trackByFn(index): number {
     return index;
   }
-
 }

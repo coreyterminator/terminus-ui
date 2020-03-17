@@ -1,6 +1,7 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { noop } from '@terminus/ngx-tools/utilities';
 import { TsChartComponent } from '@terminus/ui/chart';
 
 
@@ -8,17 +9,16 @@ import { TsChartComponent } from '@terminus/ui/chart';
  * Get the DebugElement for {@link TsChartComponent}
  *
  * @param fixture - The component fixture
- * @return The DebugElement
+ * @returns The DebugElement
  */
-export function getChartDebugElement(fixture: ComponentFixture<any>): DebugElement {
-  return fixture.debugElement.query(By.directive(TsChartComponent));
-}
+export const getChartDebugElement =
+  (fixture: ComponentFixture<any>): DebugElement => fixture.debugElement.query(By.directive(TsChartComponent));
 
 /**
  * Get the component instance for a {@link TsChartComponent}
  *
  * @param fixture - The component fixture
- * @return The instance
+ * @returns The instance
  */
 export function getChartInstance(fixture: ComponentFixture<any>): TsChartComponent {
   const debugElement = getChartDebugElement(fixture);
@@ -26,51 +26,50 @@ export function getChartInstance(fixture: ComponentFixture<any>): TsChartCompone
 }
 
 /**
- * Expose an amcharts service mock for consumers to use.
+ * Expose an Amcharts service mock for consumers to use.
  */
-
 export class AmChartsServiceMock {
   public get amCharts() {
     return {
       core: {
-        color: jest.fn(),
+        color: noop,
         options: {},
-        create: jest.fn(() => ({
+        create: () => ({
           series: {
-            clear: jest.fn(),
-            push: jest.fn(() => ({
+            clear: noop,
+            push: () => ({
               dataFields: {},
               tooltip: { background: {} },
-            })),
+            }),
           },
           responsive: { enabled: false },
           colors: { list: [] },
           xAxes: {
-            push: jest.fn(() => ({
+            push: () => ({
               dataFields: {},
               renderer: {
                 grid: { template: {} },
                 labels: { template: {} },
               },
-            })),
+            }),
           },
           yAxes: {
-            push: jest.fn(() => ({
+            push: () => ({
               title: {},
               numberFormatter: {},
               tooltip: {},
-            })),
+            }),
           },
-          dispose: jest.fn(),
-        })),
+          dispose: noop,
+        }),
       },
       charts: {
-        CategoryAxis: jest.fn(),
-        ValueAxis: jest.fn(),
-        XYCursor: jest.fn(() => ({})),
-        Legend: jest.fn(() => ({})),
-        LineSeries: jest.fn(() => ({})),
-        ColumnSeries: jest.fn(() => ({})),
+        CategoryAxis: noop,
+        ValueAxis: noop,
+        XYCursor: () => ({}),
+        Legend: () => ({}),
+        LineSeries: () => ({}),
+        ColumnSeries: () => ({}),
         XYChart: {},
         PieChart: {},
         RadarChart: {},

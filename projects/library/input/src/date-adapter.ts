@@ -43,9 +43,9 @@ export class TsDateAdapter extends NativeDateAdapter {
    *
    * @param date - The date chosen
    * @param displayFormat - The desired format (not currently using, but must match API)
-   * @return The date string
+   * @returns The date string
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public format(date: Date, displayFormat?: any): string {
     const day = this.forceTwoDigits(date.getDate());
     const month = this.forceTwoDigits(date.getMonth() + 1);
@@ -59,7 +59,7 @@ export class TsDateAdapter extends NativeDateAdapter {
    * Check if a date is valid
    *
    * @param date - The date in question
-   * @return Whether it is valid
+   * @returns Whether it is valid
    */
   public isValid(date: Date): boolean {
     return isDateValue(date);
@@ -70,7 +70,7 @@ export class TsDateAdapter extends NativeDateAdapter {
    * Force a two digit string with a preceding `0` if needed
    *
    * @param n - The number
-   * @return The two digit number
+   * @returns The two digit number
    */
   private forceTwoDigits(n: number): string {
     const digitsToRemove = -2;

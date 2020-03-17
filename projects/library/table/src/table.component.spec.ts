@@ -12,12 +12,13 @@ import { noop } from '@terminus/ngx-tools/utilities';
 import * as testComponents from '@terminus/ui/table/testing';
 // eslint-disable-next-line no-duplicate-imports
 import {
-  expectTableToMatchContent,
   getCells,
   getHeaderCells,
   getTableInstance,
   TestData,
 } from '@terminus/ui/table/testing';
+
+import { getRows } from '../testing/src/test-helpers';
 
 import {
   TsCellDirective,
@@ -26,6 +27,55 @@ import {
 import { TsColumnDefDirective } from './column';
 import { TsTableDataSource } from './table-data-source';
 import { TsTableModule } from './table.module';
+
+
+/**
+ * Custom matcher to determine if the table's contents are correct
+ *
+ * @param tableElement - The table element to check
+ * @param expectedTableContent - The content that should be found in the table
+ */
+export function expectTableToMatchContent(tableElement: Element, expectedTableContent: any[]): void {
+  const missedExpectations: string[] = [];
+  /**
+   * @param cell
+   * @param expectedTextContent
+   */
+  function checkCellContent(cell: Element, expectedTextContent: string) {
+    const actualTextContent = cell.textContent!.trim();
+    if (actualTextContent !== expectedTextContent) {
+      missedExpectations.push(
+        `Expected cell contents to be ${expectedTextContent} but was ${actualTextContent}`,
+      );
+    }
+  }
+
+  // Check header cells
+  const expectedHeaderContent = expectedTableContent.shift();
+  getHeaderCells(tableElement).forEach((cell, index) => {
+    const expected = expectedHeaderContent
+      ? expectedHeaderContent[index]
+      : null;
+    checkCellContent(cell, expected);
+  });
+
+  // Check data row cells
+  const rows = getRows(tableElement);
+  expect(rows.length).toBe(expectedTableContent.length);
+  rows.forEach((row, rowIndex) => {
+    getCells(row).forEach((cell, cellIndex) => {
+      const expected = expectedTableContent.length
+        ? expectedTableContent[rowIndex][cellIndex]
+        : null;
+      checkCellContent(cell, expected);
+    });
+  });
+
+  if (missedExpectations.length) {
+    // eslint-disable-next-line no-undef
+    fail(missedExpectations.join('\n'));
+  }
+}
 
 
 @Injectable({ providedIn: 'root' })
@@ -49,12 +99,10 @@ export class TsWindowServiceMock {
       prompt: noop,
     } as any;
   }
-
 }
 
 
 describe(`TsTableComponent`, function() {
-
   test(`should allow a custom ID and fall back to the UID`, function() {
     const fixture = createComponent(testComponents.TableApp, [], [TsTableModule]);
     fixture.detectChanges();
@@ -68,7 +116,6 @@ describe(`TsTableComponent`, function() {
   });
 
   describe(`with basic data source`, function() {
-
     test(`should be able to create a table with the right content and without when row`, function() {
       const fixture = createComponent(testComponents.TableApp, [], [TsTableModule]);
       fixture.detectChanges();
@@ -147,7 +194,6 @@ describe(`TsTableComponent`, function() {
         ['a_4', 'b_4', 'c_4'],
       ]);
     });
-
   });
 
   describe(`column width`, () => {
@@ -169,7 +215,6 @@ describe(`TsTableComponent`, function() {
 
       expect(style).toEqual('100px');
     });
-
   });
 
   describe(`table column alignment`, () => {
@@ -211,16 +256,15 @@ describe(`TsTableComponent`, function() {
       Object.defineProperties(col, { alignment: { get: () => 'foo' } });
 
       const actual = () => {
+        // @ts-ignore
         const test = new TsCellDirective(new ElementRefMock(), col, new Renderer2Mock());
       };
 
       expect(actual).toThrowError('TsCellDirective: ');
     });
-
   });
 
   describe(`pinned header and column`, () => {
-
     test(`should set a column to be sticky`, () => {
       const fixture = createComponent(testComponents.PinnedTableHeaderColumn, [], [TsTableModule]);
       fixture.detectChanges();
@@ -257,11 +301,9 @@ describe(`TsTableComponent`, function() {
       fixture.detectChanges();
       expect(instance.updateStickyColumnStyles).not.toHaveBeenCalledTimes(1);
     });
-
   });
 
   describe(`resizable columns`, () => {
-
     test(`should reveal the 'grabber' when the header cell resize is hovered`, () => {
       const fixture = createComponent(testComponents.TableApp, undefined, [TsTableModule]);
       fixture.detectChanges();
@@ -333,12 +375,10 @@ describe(`TsTableComponent`, function() {
     });
 
     describe(`TsHeaderCellDirective.determineWidth`, () => {
-
       test(`should not allow column to go below minimum width`, () => {
         expect(TsHeaderCellDirective['determineWidth'](100, -50)).toEqual(70);
         expect(TsHeaderCellDirective['determineWidth'](140, -50)).toEqual(90);
       });
-
     });
 
     test(`should remove the resizer element if one exists during creation`, () => {
@@ -358,11 +398,9 @@ describe(`TsTableComponent`, function() {
     test.todo(`should update column math on viewport changes`);
 
     test.todo(`should update column math on column changes`);
-
   });
 
   describe(`addRemainingSpaceToLastColumn`, () => {
-
     test(`should add any remaining table space to the width of the last column`, () => {
       const fixture = createComponent(testComponents.TableApp, undefined, [TsTableModule]);
       fixture.detectChanges();
@@ -380,11 +418,9 @@ describe(`TsTableComponent`, function() {
       instance['addRemainingSpaceToLastColumn'](columns, 60);
       expect(columns[1].width).toEqual(160);
     });
-
   });
 
   describe(`updateInternalColumns`, () => {
-
     test(`should update internal columns and add space to last column`, () => {
       const columnsToRender = ['column_a', 'column_b', 'column_c'];
       const columns = columnsToRender.map(name => ({
@@ -394,6 +430,8 @@ describe(`TsTableComponent`, function() {
       const fixture = createComponent(testComponents.TableApp, undefined, [TsTableModule]);
       const instance = getTableInstance(fixture);
       fixture.detectChanges();
+      // FIXME: Not sure why this flag was needed after the upgrade to Angular v9
+      // @ts-ignore
       const mock = jest.spyOn(instance, 'addRemainingSpaceToLastColumn');
       instance['updateInternalColumns'](instance['getFreshColumnsCopy'](columns));
       fixture.detectChanges();
@@ -401,11 +439,9 @@ describe(`TsTableComponent`, function() {
       expect(instance['columnsInternal'].length).toEqual(3);
       expect(mock).toHaveBeenCalled();
     });
-
   });
 
   describe(`density`, () => {
-
     test(`should be able to change the density of the table spacing`, () => {
       const fixture = createComponent(testComponents.TableApp, undefined, [TsTableModule]);
       fixture.detectChanges();
@@ -419,7 +455,5 @@ describe(`TsTableComponent`, function() {
       expect(tableElement.classList).not.toContain('ts-table--comfy');
       expect(tableElement.classList).toContain('ts-table--compact');
     });
-
   });
-
 });

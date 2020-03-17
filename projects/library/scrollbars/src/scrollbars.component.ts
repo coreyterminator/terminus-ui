@@ -71,8 +71,6 @@ const DEFAULT_SCROLL_SPEED = 400;
   templateUrl: './scrollbars.component.html',
   styleUrls: [
     './scrollbars.component.scss',
-    // NOTE: Currently Codelyzer does not consider deep relative URLs correctly prefixed: https://github.com/mgechev/codelyzer/issues/816
-    // tslint:disable-next-line relative-url-prefix
     './../../../../node_modules/perfect-scrollbar/css/perfect-scrollbar.css',
   ],
   host: { class: 'ts-scrollbars' },
@@ -94,31 +92,31 @@ export class TsScrollbarsComponent {
   /**
    * Return an object containing scrollbar geometry.
    *
-   * @return An object with all geometry information
+   * @returns An object with all geometry information
    */
   public get geometry(): TsScrollbarsGeometry | null {
     if (this.scrollbar) {
       return this.scrollbar.geometry('scroll') as TsScrollbarsGeometry;
     }
     return null;
-
   }
 
   /**
    * Return the current scrollbar position.
    *
-   * @return The current scrollbar position
+   * @returns The current scrollbar position
    */
   public get position(): TsScrollbarPosition | null {
     if (this.scrollbar) {
       return this.scrollbar.position() as TsScrollbarPosition;
     }
     return null;
-
   }
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -181,7 +179,7 @@ export class TsScrollbarsComponent {
    * See {@link TsScrollbarsScrollDirections} for all possible options.
    *
    * @param direction - The scroll direction to check
-   * @return Whether the direction is currently scrollable
+   * @returns Whether the direction is currently scrollable
    */
   public scrollable(direction: TsScrollbarsScrollDirections = 'any'): boolean | null {
     if (this.scrollbar) {
@@ -195,7 +193,7 @@ export class TsScrollbarsComponent {
    *
    * @param x - The value to scroll the x axis
    * @param y - The value to scroll the y axis
-   * @param x - The speed to scroll at
+   * @param speed
    */
   public scrollTo(x: number, y?: number, speed?: number): void {
     // istanbul ignore else
@@ -284,5 +282,4 @@ export class TsScrollbarsComponent {
       this.scrollbar.update();
     }
   }
-
 }

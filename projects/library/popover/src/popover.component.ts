@@ -8,7 +8,6 @@ import {
   OnInit,
   Output,
   ViewChild,
-  ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 import { TsUILibraryError } from '@terminus/ui/utilities';
@@ -100,14 +99,12 @@ export class TsPopoverComponent implements OnDestroy, OnInit {
   /**
    * Event emitted when the popover is hidden
    */
-  // tslint:disable-next-line:no-output-on-prefix
   @Output()
   public readonly onHidden = new EventEmitter<Popper>();
 
   /**
    * Event emitted when the popover is updated
    */
-  // tslint:disable-next-line:no-output-on-prefix
   @Output()
   public readonly onUpdate = new EventEmitter<Popper>();
 
@@ -124,9 +121,8 @@ export class TsPopoverComponent implements OnDestroy, OnInit {
   public readonly popoverShown = new EventEmitter<Popper>();
 
   constructor(
-    private viewRef: ViewContainerRef,
     private CDR: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   /**
    * Check whether popper.js has been properly imported.

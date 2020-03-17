@@ -30,7 +30,7 @@ import { TsTabComponent } from './../tab/tab.component';
  * A change event emitted on focus or selection changes
  */
 export class TsTabChangeEvent {
-  public constructor(
+  constructor(
     public index: number,
     public tab: TsTabComponent | null,
   ) {}
@@ -121,11 +121,6 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
   private tabBodyWrapperHeight = 0;
 
   /**
-   * Subscription to tabs being added or removed
-   */
-  private tabsSubscription = Subscription.EMPTY;
-
-  /**
    * Subscription to changes in the tab labels
    */
   private tabLabelSubscription = Subscription.EMPTY;
@@ -134,7 +129,7 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
    * Reference for the wrapper around the tabs
    */
   @ViewChild('tabBodyWrapper', { static: true })
-  public tabBodyWrapper: ElementRef;
+  public tabBodyWrapper!: ElementRef;
 
   /**
    * Reference for the tab header
@@ -142,13 +137,13 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
    * NOTE: We are using a template reference rather than class reference because the template needs to reference this also.
    */
   @ViewChild('tabHeader', { static: true })
-  public tabHeader: TsTabHeaderComponent;
+  public tabHeader!: TsTabHeaderComponent;
 
   /**
    * Reference for the collection of tabs
    */
   @ContentChildren(TsTabComponent)
-  public tabs: QueryList<TsTabComponent>;
+  public tabs!: QueryList<TsTabComponent>;
 
   /**
    * Define the position of the tab header
@@ -158,6 +153,8 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
 
   /**
    * Define the index of the active tab
+   *
+   * @param value - The index to select
    */
   @Input()
   public set selectedIndex(value: number | null) {
@@ -207,7 +204,7 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
   public readonly selectedTabChange: EventEmitter<TsTabChangeEvent> = new EventEmitter<TsTabChangeEvent>(true);
 
 
-  public constructor(
+  constructor(
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
@@ -219,7 +216,7 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
     this.subscribeToTabLabels();
 
     // Subscribe to changes in the amount of tabs, in order to be able to re-render the content as new tabs are added or removed
-    this.tabsSubscription = this.tabs.changes.pipe(untilComponentDestroyed(this)).subscribe(() => {
+    this.tabs.changes.pipe(untilComponentDestroyed(this)).subscribe(() => {
       const indexToSelect = this.clampTabIndex(this._indexToSelect);
 
       // Maintain the previously-selected tab if a new tab is added or removed and there is no explicit change that selects a different tab
@@ -270,7 +267,6 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
           this.selectedIndexChange.emit(indexToSelect);
         }
       });
-
     }
 
     // Set up the position for each tab and optionally setup an origin on the next selected tab
@@ -290,9 +286,10 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
   }
 
 
-  public ngOnDestroy(): void {
-    // Needed for untilComponentDestroyed
-  }
+  /**
+   * Needed for untilComponentDestroyed
+   */
+  public ngOnDestroy(): void {}
 
 
   /**
@@ -382,7 +379,7 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
    * Clamps the given index to the bounds of 0 and the tabs length
    *
    * @param index - The index
-   * @return The clamped index
+   * @returns The clamped index
    */
   private clampTabIndex(index: number | null): number {
     // NOTE: Using `|| 0` ensures that values like NaN can't get through and which would otherwise throw the component into an infinite
@@ -395,7 +392,7 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
    * Create a new change event
    *
    * @param index - The tab index
-   * @return The change event
+   * @returns The change event
    */
   private createChangeEvent(index: number): TsTabChangeEvent {
     let tab: TsTabComponent | null = null;
@@ -411,10 +408,9 @@ export class TsTabCollectionComponent implements AfterContentInit, AfterContentC
    *
    * @param index - The item index
    * @param item - The item
-   * @return The unique ID
+   * @returns The unique ID
    */
   public trackByFn(index, item): number {
     return item.id;
   }
-
 }

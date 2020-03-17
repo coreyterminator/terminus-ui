@@ -23,7 +23,8 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
-  ControlValueAccessor, NG_VALUE_ACCESSOR,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { coerceBooleanProperty } from '@terminus/ngx-tools/coercion';
@@ -39,23 +40,20 @@ import {
   TsOptionComponent,
   TsOptionSelectionChange,
 } from '@terminus/ui/option';
-import {
-  ControlValueAccessorProviderFactory,
-  TsUILibraryError,
-} from '@terminus/ui/utilities';
+import { TsUILibraryError } from '@terminus/ui/utilities';
 import {
   defer,
-  fromEvent,
-  merge,
-  Observable,
-  of,
+  Observable, of,
+  scheduled,
   Subject,
   Subscription,
 } from 'rxjs';
+import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   delay,
   filter,
   map,
+  mergeAll,
   switchMap,
   take,
   tap,
@@ -133,7 +131,6 @@ let nextUniqueId = 0;
   ],
   exportAs: 'tsAutocompleteTrigger',
 })
-// tslint:disable-next-line no-any
 export class TsAutocompleteTriggerDirective<ValueType = string> implements ControlValueAccessor, OnDestroy {
   /**
    * Whether the autocomplete can open the next time it is focused. Used to prevent a focused, closed autocomplete from being reopened if
@@ -172,13 +169,15 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    */
   public readonly optionSelections: Observable<TsOptionSelectionChange> | Observable<{}> = defer(() => {
     if (this.autocompletePanel && this.autocompletePanel.options) {
-      return merge(...this.autocompletePanel.options.map(option => option.selectionChange));
+      scheduled([...this.autocompletePanel.options.map(option => option.selectionChange)], asap).pipe(mergeAll());
     }
 
     // If there are any subscribers before `ngAfterViewInit`, the `autocomplete` will be undefined.
     // In that case, return a stream that we'll replace with the real one once everything is in place.
     return this.ngZone.onStable
       .asObservable()
+      // TODO: Refactor deprecation
+      // eslint-disable-next-line deprecation/deprecation
       .pipe(take(1), switchMap(() => this.optionSelections));
   });
 
@@ -239,13 +238,14 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    * A stream of actions that should close the autocomplete panel, including when an option is selected, on blur, and when TAB is pressed.
    */
   public get panelClosingActions(): Observable<TsOptionSelectionChange | null> {
-    return merge(
+    return scheduled([
       this.optionSelections,
       this.autocompletePanel.keyManager.tabOut.pipe(filter(() => this.overlayAttached)),
       this.closeKeyEventStream,
-      this.overlayRef.backdropClick(),
-    ).pipe(
-      // Normalize the output so we return a consistent type.
+      // eslint-disable-next-line deprecation/deprecation
+      this.overlayRef?.backdropClick() || of<string>(''),
+    ], asap).pipe(
+      mergeAll(),
       map(event => (event instanceof TsOptionSelectionChange ? event : null)),
     );
   }
@@ -262,7 +262,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    *
    * NOTE: Input has specific naming since it is accepting a standard HTML data attribute.
    */
-  // tslint:disable: no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('autocomplete')
   public autocompleteAttribute = 'off';
 
@@ -272,6 +272,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    *
    * @param value
    */
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('tsAutocompleteDisabled')
   public set autocompleteDisabled(value: boolean) {
     this._autocompleteDisabled = coerceBooleanProperty(value);
@@ -285,10 +286,9 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    * The autocomplete panel to be attached to this trigger
    */
   // Note: Renaming as prefixed name does not add clarity
-  // tslint:disable: no-input-rename
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('tsAutocompleteTrigger')
   public autocompletePanel!: TsAutocompletePanelComponent;
-  // tslint:enable: no-input-rename
 
   /**
    * Define if the autocomplete panel should reopen after a selection is made
@@ -313,7 +313,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
     private changeDetectorRef: ChangeDetectorRef,
     private documentService: TsDocumentService,
     private viewportRuler: ViewportRuler,
-    // tslint:disable-next-line no-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     @Inject(TS_AUTOCOMPLETE_SCROLL_STRATEGY) scrollStrategy: any,
     @Optional() @Host() private formField: TsFormFieldComponent,
   ) {
@@ -465,7 +465,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   /**
    * View -> model callback called when value changes
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public onChange: (value: any) => void = () => {};
 
 
@@ -765,7 +765,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    *
    * @param value - The value to set
    */
-  // tslint:disable-next-line no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private setTriggerValue(value: any): void {
     const displayFn = this.autocompletePanel && this.autocompletePanel.displayWith;
     const toDisplay = displayFn ? displayFn(value) : value;
@@ -808,16 +808,22 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
   public subscribeToClosingActions(): Subscription {
     const firstStable = this.ngZone.onStable.asObservable().pipe(take(1));
     const optionChanges = this.autocompletePanel.options.changes.pipe(
+      // TODO: Refactor deprecation
+      // eslint-disable-next-line deprecation/deprecation
       tap(() => this.positionStrategy.reapplyLastPosition()),
       // Defer emitting to the stream until the next tick, because changing bindings in here will cause "changed after checked" errors.
       delay(0),
     );
 
     // When the zone is stable initially, and when the option list changes...
-    return merge(firstStable, optionChanges)
+
+    return scheduled([firstStable, optionChanges], asap)
       .pipe(
+        mergeAll(),
         // Create a new stream of panelClosingActions, replacing any previous streams that were created, and flatten it so our stream only
         // emits closing events...
+        // TODO: Refactor deprecation
+        // eslint-disable-next-line deprecation/deprecation
         switchMap(() => {
           this.resetActiveItem();
           this.autocompletePanel.setVisibility();

@@ -65,7 +65,7 @@ const SVG = `
 })
 export class RadioComponent {
   items$: Observable<TsRadioOption[]> = of(DEMO_ITEMS);
-  // tslint:disable: max-line-length
+  // eslint:disable: max-len
   items2$: Observable<TsRadioOption[]> = of([
     {
       foo: 'foo2_value',
@@ -90,7 +90,7 @@ export class RadioComponent {
       bing: 'Some helper text. Some helper text for my item. Some helper text. And even more text.',
     },
   ]);
-  // tslint:enable: max-line-length
+  // eslint:enable: max-len
   myForm: FormGroup = this.formBuilder.group({
     isSmall: false,
     isCentered: true,
