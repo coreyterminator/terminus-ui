@@ -70,7 +70,6 @@ describe(`TsIconComponent`, function() {
 
 
   describe(`svgIcon`, () => {
-
     test(`should log a warning if an invalid value was passed in`, () => {
       window.console.warn = jest.fn();
       hostComponent.customIcon = 'foo' as any;
@@ -88,19 +87,15 @@ describe(`TsIconComponent`, function() {
 
       expect(svg).toBeTruthy();
     });
-
   });
 
 
   describe(`background`, () => {
-
     test(`should get/set the background flag`, () => {
       expect(icon1.background).toEqual(false);
       hostComponent.hasBackground = true;
       fixture.detectChanges();
       expect(icon1.background).toEqual(true);
     });
-
   });
-
 });

@@ -1,0 +1,23 @@
+{
+  "extends": "./../../tsconfig.json",
+  "angularCompilerOptions": {
+    "enableResourceInlining": true,
+    "flatModuleId": "@terminus/ui",
+    "preserveWhitespaces": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "outDir": "../../out-tsc/lib",
+    "strictNullChecks": true,
+    "target": "es2015",
+    "types": []
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/testing/*",
+    "**/test-sass.js"
+  ]
+}

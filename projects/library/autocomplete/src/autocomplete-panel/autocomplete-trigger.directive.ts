@@ -42,13 +42,14 @@ import {
 } from '@terminus/ui/option';
 import { TsUILibraryError } from '@terminus/ui/utilities';
 import {
+  asapScheduler,
   defer,
-  Observable, of,
+  Observable,
+  of,
   scheduled,
   Subject,
   Subscription,
 } from 'rxjs';
-import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   delay,
   filter,
@@ -169,7 +170,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    */
   public readonly optionSelections: Observable<TsOptionSelectionChange> | Observable<{}> = defer(() => {
     if (this.autocompletePanel && this.autocompletePanel.options) {
-      scheduled([...this.autocompletePanel.options.map(option => option.selectionChange)], asap).pipe(mergeAll());
+      scheduled([...this.autocompletePanel.options.map(option => option.selectionChange)], asapScheduler).pipe(mergeAll());
     }
 
     // If there are any subscribers before `ngAfterViewInit`, the `autocomplete` will be undefined.
@@ -244,7 +245,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
       this.closeKeyEventStream,
       // eslint-disable-next-line deprecation/deprecation
       this.overlayRef?.backdropClick() || of<string>(''),
-    ], asap).pipe(
+    ], asapScheduler).pipe(
       mergeAll(),
       map(event => (event instanceof TsOptionSelectionChange ? event : null)),
     );
@@ -817,7 +818,7 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
 
     // When the zone is stable initially, and when the option list changes...
 
-    return scheduled([firstStable, optionChanges], asap)
+    return scheduled([firstStable, optionChanges], asapScheduler)
       .pipe(
         mergeAll(),
         // Create a new stream of panelClosingActions, replacing any previous streams that were created, and flatten it so our stream only

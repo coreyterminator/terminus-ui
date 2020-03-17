@@ -41,6 +41,7 @@ import {
   TsUILibraryError,
 } from '@terminus/ui/utilities';
 import {
+  asapScheduler,
   defer,
   merge,
   Observable,
@@ -49,7 +50,6 @@ import {
   Subject,
   Subscription,
 } from 'rxjs';
-import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   delay,
   filter,
@@ -241,7 +241,7 @@ export class TsSelectionListTriggerDirective<ValueType = string> implements Cont
       this.closeKeyEventStream,
       // eslint-disable-next-line deprecation/deprecation
       this.overlayRef?.backdropClick() || of<string>(''),
-    ], asap)
+    ], asapScheduler)
       .pipe(
         mergeAll(),
         // Normalize the output so we return a consistent type.
@@ -793,7 +793,7 @@ export class TsSelectionListTriggerDirective<ValueType = string> implements Cont
     return scheduled([
       firstStable,
       optionChanges,
-    ], asap)
+    ], asapScheduler)
       .pipe(
         mergeAll(),
         // Create a new stream of panelClosingActions, replacing any previous streams that were created, and flatten it so our stream only

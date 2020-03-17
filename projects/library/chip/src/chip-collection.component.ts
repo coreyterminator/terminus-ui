@@ -20,10 +20,10 @@ import {
 import { untilComponentDestroyed } from '@terminus/ngx-tools';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
 import {
+  asapScheduler,
   Observable,
   scheduled,
 } from 'rxjs';
-import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   mergeAll,
   startWith,
@@ -174,7 +174,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipSelectionChanges(): Observable<TsChipSelectionChange> {
-    return scheduled([...this.chips.map(chip => chip.selectionChange)], asap).pipe(mergeAll());
+    return scheduled([...this.chips.map(chip => chip.selectionChange)], asapScheduler).pipe(mergeAll());
   }
 
   /**
@@ -183,7 +183,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipFocusChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.onFocus)], asap).pipe(mergeAll());
+    return scheduled([...this.chips.map(chip => chip.onFocus)], asapScheduler).pipe(mergeAll());
   }
 
   /**
@@ -192,7 +192,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipBlurChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.blurred)], asap).pipe(mergeAll());
+    return scheduled([...this.chips.map(chip => chip.blurred)], asapScheduler).pipe(mergeAll());
   }
 
   /**
@@ -201,7 +201,7 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipDestroyChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.destroyed)], asap).pipe(mergeAll());
+    return scheduled([...this.chips.map(chip => chip.destroyed)], asapScheduler).pipe(mergeAll());
   }
 
   /**

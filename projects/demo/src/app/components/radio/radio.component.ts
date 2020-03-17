@@ -5,15 +5,14 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  Observable,
-  of,
-} from 'rxjs';
-
-import {
   TsRadioChange,
   TsRadioFormatFn,
   TsRadioOption,
 } from '@terminus/ui/radio-group';
+import {
+  Observable,
+  of,
+} from 'rxjs';
 
 
 const DEMO_ITEMS: TsRadioOption[] = [
@@ -34,6 +33,7 @@ const DEMO_ITEMS: TsRadioOption[] = [
     bing: 'Some helper text for my item',
   },
 ];
+// @ts-ignore - Optional demo data
 const DEMO_ITEMS2: TsRadioOption[] = [
   {
     foo: 'foo2_value',
@@ -137,5 +137,4 @@ export class RadioComponent {
   log(v: any): void {
     console.log('DEMO: form submission: ', v);
   }
-
 }

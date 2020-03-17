@@ -155,8 +155,3 @@ export class ValidationComponent implements OnInit {
   }
 }
 
-
-/**
- * @param x
- */
-const isControl = (x: any): x is AbstractControl => x.pristine !== undefined;

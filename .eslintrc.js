@@ -433,6 +433,10 @@ module.exports = {
       rules: {
         '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/member-ordering': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+        'no-console': 'off',
+        'no-magic-numbers': 'off',
       },
     },
   ],

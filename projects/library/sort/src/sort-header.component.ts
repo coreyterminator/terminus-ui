@@ -16,8 +16,10 @@ import { CanDisable } from '@angular/material/core';
 import { coerceBooleanProperty } from '@terminus/ngx-tools/coercion';
 import { isBoolean } from '@terminus/ngx-tools/type-guards';
 import { untilComponentDestroyed } from '@terminus/ngx-tools/utilities';
-import { scheduled } from 'rxjs';
-import { asap } from 'rxjs/internal/scheduler/asap';
+import {
+  asapScheduler,
+  scheduled,
+} from 'rxjs';
 import { mergeAll } from 'rxjs/operators';
 
 import { tsSortAnimations } from './sort-animations';
@@ -133,7 +135,7 @@ export class TsSortHeaderComponent implements TsSortableItem, CanDisable, OnInit
    */
   public ngOnInit(): void {
     // Mark directive for change detection after any of these changes
-    scheduled([this._sort.sortChange, this._sort._stateChanges, this._intl.changes], asap)
+    scheduled([this._sort.sortChange, this._sort._stateChanges, this._intl.changes], asapScheduler)
       .pipe(
         mergeAll(),
         untilComponentDestroyed(this),

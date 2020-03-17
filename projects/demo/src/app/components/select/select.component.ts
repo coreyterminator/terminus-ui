@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnInit,
 } from '@angular/core';
@@ -224,9 +223,7 @@ export class SelectComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef,
   ) {
-
     this.firstOptions = this.singleWithCustomTrigger;
   }
 

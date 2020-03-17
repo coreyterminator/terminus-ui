@@ -1,14 +1,17 @@
 {
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "preserveWhitespaces": false
+    "strictInjectionParameters": true
   },
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "declaration": false,
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "incremental": true,
+    "importHelpers": true,
     "lib": [
       "es2018",
       "dom"
@@ -18,21 +21,17 @@
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "outDir": "./dist/out-tsc",
+    "paths": {
+      "@terminus/ui": [
+        "dist/library/terminus-ui",
+        "dist/library"
+      ]
+    },
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "paths": {
-      "library": [
-        "dist/library"
-      ],
-      "library/*": [
-        "dist/library/*"
-      ]
-    }
+    "target": "es2015"
   }
 }

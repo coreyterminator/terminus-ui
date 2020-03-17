@@ -13,16 +13,16 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { untilComponentDestroyed } from '@terminus/ngx-tools';
+import { untilComponentDestroyed } from '@terminus/ngx-tools/utilities';
 import { TsDocumentService } from '@terminus/ngx-tools/browser';
 import { TS_SPACING } from '@terminus/ui/spacing';
 import { TsStyleThemeTypes } from '@terminus/ui/utilities';
 import {
+  asapScheduler,
   EMPTY,
   fromEvent,
   scheduled,
 } from 'rxjs';
-import { asap } from 'rxjs/internal/scheduler/asap';
 import {
   startWith,
   take,
@@ -286,7 +286,7 @@ export class TsFormFieldComponent implements AfterContentInit, AfterContentCheck
 
     // Run change detection if the value, prefix, or suffix changes.
     const valueChanges = (this.control.ngControl && this.control.ngControl.valueChanges) || EMPTY;
-    scheduled([valueChanges, this.prefixChildren.changes, this.suffixChildren.changes], asap)
+    scheduled([valueChanges, this.prefixChildren.changes, this.suffixChildren.changes], asapScheduler)
       .pipe(untilComponentDestroyed(this))
       .subscribe(() => this.changeDetectorRef.markForCheck());
 

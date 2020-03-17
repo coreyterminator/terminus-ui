@@ -45,7 +45,7 @@
     "yarn": ">= 1.0.0"
   },
   "dependencies": {
-    "ngx-perfect-scrollbar": "8.0.0",
+    "ngx-perfect-scrollbar": "9.0.0",
     "text-mask-addons": "3.8.0",
     "text-mask-core": "5.1.2"
   },
@@ -53,14 +53,14 @@
     "@angular/animations": "^9.0.0",
     "@angular/cdk": "^9.0.0",
     "@angular/core": "^9.0.0",
-    "@angular/flex-layout": "8.0.0-beta.26",
+    "@angular/flex-layout": "9.0.0-beta.29",
     "@angular/forms": "^9.0.0",
     "@angular/material": "^9.0.0",
     "@angular/platform-browser": "^9.0.0",
     "@angular/router": "^9.0.0",
     "@terminus/ngx-tools": ">=7.0.0",
     "date-fns": "^2.0.1",
-    "rxjs": "^6.5.2"
+    "rxjs": "^6.5.4"
   },
   "optionalDependencies": {
     "@amcharts/amcharts4": "^4.5.0",
