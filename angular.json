@@ -14,6 +14,7 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
+          "sourceMap": true,
           "configurations": {
             "production": {
               "tsConfig": "projects/library/tsconfig.lib.prod.json"
@@ -21,7 +22,7 @@
           },
           "options": {
             "tsConfig": "projects/library/tsconfig.lib.json",
-            "project": "projects/library/ng-package.json"
+            "project": "projects/library/ng-package.json",
           }
         },
         "test": {
@@ -34,9 +35,9 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": ".eslintrc.js",
+            "eslintConfig": "./.eslintrc.js",
             "tsConfig": [
-              "projects/library/tsconfig.json",
+              "projects/library/tsconfig.lib.json",
               "projects/library/tsconfig.spec.json"
             ],
             "exclude": [
@@ -84,6 +85,8 @@
                   "with": "projects/demo/src/environments/environment.prod.ts"
                 }
               ],
+              "aot": true,
+              "buildOptimizer": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -91,7 +94,6 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -110,7 +112,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo:build"
+            "browserTarget": "demo:build",
+            "sourceMap": {
+              "scripts": true,
+              "styles": true,
+              "vendor": true
+            }
           },
           "configurations": {
             "production": {
@@ -148,6 +155,16 @@
               "projects/demo/tsconfig.spec.json",
               "projects/demo/e2e/tsconfig.json"
             ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "lint-styles": {
+          "builder": "@speedy/build-angular:stylelint",
+          "fix": true,
+          "options": {
+            "stylelintConfig": ".stylelintrc",
             "exclude": [
               "**/node_modules/**"
             ]
@@ -200,6 +217,7 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
+              "aot": true,
               "buildOptimizer": true,
               "budgets": [
                 {

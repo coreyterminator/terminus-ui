@@ -32,12 +32,6 @@ module.exports = {
     // The second call to ‘super()’ will fail at runtime.
     'constructor-super': SEVERITY,
 
-    // Helps to maintain a consistent, readable style in the codebase.
-    'padded-blocks': [
-      SEVERITY,
-      'never',
-    ],
-
     // It is usually a typing mistake to compare the result of a typeof operator to other string literals.
     'valid-typeof': SEVERITY,
 
@@ -285,9 +279,6 @@ module.exports = {
         // Interfaces prescribe typed method signatures. Use those signatures to flag spelling and syntax mistakes.
         '@angular-eslint/use-pipe-decorator': SEVERITY,
 
-
-
-
         // An interface or literal type with just a call signature can be written as a function type.
         '@typescript-eslint/prefer-function-type': SEVERITY,
 
@@ -351,7 +342,7 @@ module.exports = {
         'indent': 'off',
         // Helps to maintain a consistent, readable style in the codebase.
         '@typescript-eslint/indent': [
-          SEVERITY,
+          'off',
           2,
           { CallExpression: {'arguments': 1} },
         ],
@@ -377,17 +368,6 @@ module.exports = {
         // NOTE: UI only
         // For performance, prefer OnPush
         '@angular-eslint/prefer-on-push-component-change-detection': SEVERITY,
-      },
-    },
-
-    // All HTML templates
-    {
-      files: ['*.component.html'],
-      parser: '@angular-eslint/template-parser',
-      plugins: ['@angular-eslint/template'],
-      rules: {
-        // Ensure that the two-way data binding syntax is correct.
-        '@angular-eslint/template-banana-in-box': SEVERITY,
       },
     },
 
