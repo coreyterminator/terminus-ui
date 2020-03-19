@@ -300,19 +300,20 @@ module.exports = {
           },
         ],
 
+        // TODO: was showing errors for all getter private props etc
         // A consistent ordering of fields, methods and constructors can make interfaces, type literals, classes and class expressions
         // easier to read, navigate and edit.
-        '@typescript-eslint/member-ordering': [
-          SEVERITY,
-          {
-            default: [
-              'static-field',
-              'instance-field',
-              'static-method',
-              'instance-method',
-            ],
-          },
-        ],
+        // '@typescript-eslint/member-ordering': [
+        //   SEVERITY,
+        //   {
+        //     default: [
+        //       'static-field',
+        //       'instance-field',
+        //       'static-method',
+        //       'instance-method',
+        //     ],
+        //   },
+        // ],
 
         // Using any as a type declaration nullifies the compile-time benefits of the type system.
         '@typescript-eslint/no-explicit-any': SEVERITY,
@@ -401,6 +402,7 @@ module.exports = {
         '@angular-eslint/prefer-on-push-component-change-detection': 'off',
         '@angular-eslint/use-component-selector': 'off',
         '@angular-eslint/component-max-inline-declarations': 'off',
+        '@angular-eslint/no-lifecycle-call': 'off',
         '@typescript-eslint/explicit-member-accessibility': 'off',
       },
     },

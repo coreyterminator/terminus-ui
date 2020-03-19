@@ -126,11 +126,12 @@ describe(`ChartComponent`, function() {
       test(`should initialize for the ${t} visualization`, fakeAsync(() => {
         window.console.warn = jest.fn();
         const fixture = createComponent<testComponents.VisualizationsHost>(testComponents.VisualizationsHost);
+        const createSpy = jest.spyOn(fixture.componentInstance.component['amCharts'].core, 'create');
         fixture.componentInstance.visualization = t;
         fixture.detectChanges();
         tick();
 
-        expect(fixture.componentInstance.component['amCharts'].core.create).toHaveBeenCalled();
+        expect(createSpy).toHaveBeenCalled();
         expect(window.console.warn).not.toHaveBeenCalled();
       }));
     }
@@ -198,17 +199,10 @@ describe(`ChartComponent`, function() {
 });
 
 
-
-
-/**
- * Providers
- */
-
 const AM_CHARTS_PROVIDER: Provider[] = [{
   provide: TsAmChartsService,
   useClass: AmChartsServiceMock,
 }];
-
 
 /**
  * Create component

@@ -203,7 +203,7 @@ export class TsChartComponent implements OnInit, OnChanges, OnDestroy {
         this.chart = chart;
         this.chartInitialized.emit(chart);
       } else {
-        console.warn(`TsChartComponent: "${type}" is not a supported chart type. See TsChartVisualizationOptions.`);
+        console.warn(`TsChartComponent: ${type} is not a supported chart type. See TsChartVisualizationOptions.`);
       }
     });
   }

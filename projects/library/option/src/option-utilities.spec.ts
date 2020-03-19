@@ -94,9 +94,7 @@ export class EmptyQueryList {
 }
 
 
-
-
-export const createComponent =
+const createComponent =
   <T>(component: Type<T>, providers: Provider[] = [], imports: any[] = []): ComponentFixture<T> => createComponentInner<T>(
     component,
     providers,

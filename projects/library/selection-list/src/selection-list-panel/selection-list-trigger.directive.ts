@@ -41,12 +41,10 @@ import {
   TsUILibraryError,
 } from '@terminus/ui/utilities';
 import {
-  asapScheduler,
   defer,
   merge,
   Observable,
   of,
-  scheduled,
   Subject,
   Subscription,
 } from 'rxjs';
@@ -54,7 +52,6 @@ import {
   delay,
   filter,
   map,
-  mergeAll,
   switchMap,
   take,
   tap,
@@ -235,15 +232,15 @@ export class TsSelectionListTriggerDirective<ValueType = string> implements Cont
    * A stream of actions that should close the panel, including when an option is selected, on blur, and when TAB is pressed.
    */
   public get panelClosingActions(): Observable<TsOptionSelectionChange | null> {
-    return scheduled([
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(
       this.optionSelections,
       this.selectionListPanel.keyManager.tabOut.pipe(filter(() => this.overlayAttached)),
       this.closeKeyEventStream,
       // eslint-disable-next-line deprecation/deprecation
       this.overlayRef?.backdropClick() || of<string>(''),
-    ], asapScheduler)
+    )
       .pipe(
-        mergeAll(),
         // Normalize the output so we return a consistent type.
         map(event => (event instanceof TsOptionSelectionChange ? event : null)),
       );
@@ -790,12 +787,12 @@ export class TsSelectionListTriggerDirective<ValueType = string> implements Cont
     );
 
     // When the zone is stable initially, and when the option list changes...
-    return scheduled([
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(
       firstStable,
       optionChanges,
-    ], asapScheduler)
+    )
       .pipe(
-        mergeAll(),
         // Create a new stream of panelClosingActions, replacing any previous streams that were created, and flatten it so our stream only
         // emits closing events...
         // TODO: Refactor deprecation

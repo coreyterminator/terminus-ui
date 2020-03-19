@@ -2,9 +2,13 @@ const baseConfig = require('./jest.base.config');
 
 module.exports = {
   ...baseConfig,
-  roots: ['<rootDir>/projects/library'],
+  roots: ['.'],
+  testMatch: [
+    '<rootDir>/projects/library/**/?(*.)spec.ts?(x)',
+    '<rootDir>/projects/library/**/?(*.)test-sass.js?(x)',
+  ],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/demo/app',
   ],
-}
+};

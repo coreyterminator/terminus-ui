@@ -11,7 +11,7 @@ const mock = () => {
 Object.defineProperty(window, 'localStorage', { value: mock() });
 Object.defineProperty(window, 'sessionStorage', { value: mock() });
 Object.defineProperty(window, 'CSS', { value: () => ({}) });
-
+Object.defineProperty(window, 'getComputedStyle', { value: () => ({ getPropertyValue: prop => '' }) });
 
 /**
  * Patches for Material

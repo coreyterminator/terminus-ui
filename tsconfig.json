@@ -5,6 +5,7 @@
   },
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": "./",
     "declaration": false,
     "downlevelIteration": true,
@@ -32,6 +33,9 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "es2015"
+    "target": "es2015",
+    "types": [
+      "jest"
+    ]
   }
 }

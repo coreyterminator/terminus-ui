@@ -9,7 +9,6 @@ import {
   tick,
 } from '@angular/core/testing';
 import {
-  FormControl,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -434,7 +433,7 @@ describe(`TsInputComponent`, function() {
       const fixture = createComponent(TestComponents.MissingFormControl);
       fixture.detectChanges();
 
-      expect(fixture.componentInstance.inputComponent.formControl instanceof FormControl).toBeTruthy();
+      expect(fixture.componentInstance.inputComponent.formControl).toBeTruthy();
     });
   });
 
@@ -819,7 +818,6 @@ describe(`TsInputComponent`, function() {
 
       const resetButton = fixture.debugElement.query(By.css('.c-input__clear')).nativeElement as HTMLButtonElement;
       const component = fixture.componentInstance.inputComponent;
-      const inputElement = getInputElement(fixture);
       sendInput(fixture, '11111111');
 
       resetButton.click();
@@ -999,9 +997,11 @@ describe(`noValidationOrHint`, () => {
 
 
 /**
+ * Create the test component
+ *
  * @param component
  */
-const createComponent<T> = (component: Type<T>): ComponentFixture<T> => createComponentInner<T>(
+const createComponent = <T>(component: Type<T>): ComponentFixture<T> => createComponentInner<T>(
     component,
     [
       {
@@ -1034,7 +1034,6 @@ class MyDocumentService extends TsDocumentServiceMock {
     createEvent: () => document.createEvent('Event'),
   };
 }
-
 
 interface AutofillEvent {
   target: Element;

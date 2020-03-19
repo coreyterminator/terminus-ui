@@ -13,18 +13,16 @@ import * as testComponents from '@terminus/ui/table/testing';
 // eslint-disable-next-line no-duplicate-imports
 import {
   getCells,
+  getRows,
   getHeaderCells,
   getTableInstance,
   TestData,
 } from '@terminus/ui/table/testing';
 
-import { getRows } from '../testing/src/test-helpers';
-
 import {
-  TsCellDirective,
+  setColumnAlignment,
   TsHeaderCellDirective,
 } from './cell';
-import { TsColumnDefDirective } from './column';
 import { TsTableDataSource } from './table-data-source';
 import { TsTableModule } from './table.module';
 
@@ -252,14 +250,10 @@ describe(`TsTableComponent`, function() {
     });
 
     test(`should throw error for invalid alignment arguments`, () => {
-      const col = new TsColumnDefDirective(new ElementRefMock());
-      Object.defineProperties(col, { alignment: { get: () => 'foo' } });
-
+      const fakeColumn = { alignment: 'foo' };
       const actual = () => {
-        // @ts-ignore
-        const test = new TsCellDirective(new ElementRefMock(), col, new Renderer2Mock());
+        setColumnAlignment(fakeColumn as any, new Renderer2Mock(), new ElementRefMock());
       };
-
       expect(actual).toThrowError('TsCellDirective: ');
     });
   });

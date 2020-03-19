@@ -11,7 +11,8 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectorRef,
   Directive,
-  ElementRef, forwardRef,
+  ElementRef,
+  forwardRef,
   Host,
   Inject,
   InjectionToken,
@@ -42,11 +43,10 @@ import {
 } from '@terminus/ui/option';
 import { TsUILibraryError } from '@terminus/ui/utilities';
 import {
-  asapScheduler,
   defer,
+  merge,
   Observable,
   of,
-  scheduled,
   Subject,
   Subscription,
 } from 'rxjs';
@@ -54,7 +54,6 @@ import {
   delay,
   filter,
   map,
-  mergeAll,
   switchMap,
   take,
   tap,
@@ -170,7 +169,8 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    */
   public readonly optionSelections: Observable<TsOptionSelectionChange> | Observable<{}> = defer(() => {
     if (this.autocompletePanel && this.autocompletePanel.options) {
-      scheduled([...this.autocompletePanel.options.map(option => option.selectionChange)], asapScheduler).pipe(mergeAll());
+      // eslint-disable-next-line deprecation/deprecation
+      return merge(...this.autocompletePanel.options.map(option => option.selectionChange));
     }
 
     // If there are any subscribers before `ngAfterViewInit`, the `autocomplete` will be undefined.
@@ -239,14 +239,14 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
    * A stream of actions that should close the autocomplete panel, including when an option is selected, on blur, and when TAB is pressed.
    */
   public get panelClosingActions(): Observable<TsOptionSelectionChange | null> {
-    return scheduled([
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(
       this.optionSelections,
       this.autocompletePanel.keyManager.tabOut.pipe(filter(() => this.overlayAttached)),
       this.closeKeyEventStream,
       // eslint-disable-next-line deprecation/deprecation
       this.overlayRef?.backdropClick() || of<string>(''),
-    ], asapScheduler).pipe(
-      mergeAll(),
+    ).pipe(
       map(event => (event instanceof TsOptionSelectionChange ? event : null)),
     );
   }
@@ -818,9 +818,8 @@ export class TsAutocompleteTriggerDirective<ValueType = string> implements Contr
 
     // When the zone is stable initially, and when the option list changes...
 
-    return scheduled([firstStable, optionChanges], asapScheduler)
+    return merge(firstStable, optionChanges)
       .pipe(
-        mergeAll(),
         // Create a new stream of panelClosingActions, replacing any previous streams that were created, and flatten it so our stream only
         // emits closing events...
         // TODO: Refactor deprecation

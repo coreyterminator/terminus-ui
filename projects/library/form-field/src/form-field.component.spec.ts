@@ -186,11 +186,15 @@ describe(`TsFormFieldComponent`, function() {
 
 
 /**
+ * Create the test component
+ *
  * @param component
  * @param providers
  * @param imports
  */
-const createComponent<T> = (component: Type<T>, providers: Provider[] = [], imports: any[] = []): ComponentFixture<T> => createComponentInner<T>(component,
+const createComponent =
+  <T>(component: Type<T>, providers: Provider[] = [], imports: any[] = []): ComponentFixture<T> => createComponentInner<T>(
+    component,
     providers,
     [
       FormsModule,
@@ -198,7 +202,8 @@ const createComponent<T> = (component: Type<T>, providers: Provider[] = [], impo
       TsFormFieldModule,
       TsInputModule,
       NoopAnimationsModule,
-    ]);
+    ],
+  );
 
 class MyDocumentService extends TsDocumentServiceMock {
   public document: any = {

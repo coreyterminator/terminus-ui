@@ -26,11 +26,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/library/src/test.ts",
-            "tsConfig": "projects/library/tsconfig.spec.json"
-          }
+          "builder": "@angular-builders/jest:run"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

@@ -20,14 +20,10 @@ import {
 import { untilComponentDestroyed } from '@terminus/ngx-tools';
 import { KEYS } from '@terminus/ngx-tools/keycodes';
 import {
-  asapScheduler,
+  merge,
   Observable,
-  scheduled,
 } from 'rxjs';
-import {
-  mergeAll,
-  startWith,
-} from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 
 import {
   TsChipComponent,
@@ -174,7 +170,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipSelectionChanges(): Observable<TsChipSelectionChange> {
-    return scheduled([...this.chips.map(chip => chip.selectionChange)], asapScheduler).pipe(mergeAll());
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(...this.chips.map(chip => chip.selectionChange));
   }
 
   /**
@@ -183,7 +180,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipFocusChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.onFocus)], asapScheduler).pipe(mergeAll());
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(...this.chips.map(chip => chip.onFocus));
   }
 
   /**
@@ -192,7 +190,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipBlurChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.blurred)], asapScheduler).pipe(mergeAll());
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(...this.chips.map(chip => chip.blurred));
   }
 
   /**
@@ -201,7 +200,8 @@ export class TsChipCollectionComponent implements OnInit, AfterViewInit, AfterCo
    * @internal
    */
   public get chipDestroyChanges(): Observable<TsChipEvent> {
-    return scheduled([...this.chips.map(chip => chip.destroyed)], asapScheduler).pipe(mergeAll());
+    // eslint-disable-next-line deprecation/deprecation
+    return merge(...this.chips.map(chip => chip.destroyed));
   }
 
   /**
