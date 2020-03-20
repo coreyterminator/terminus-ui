@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  // ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -46,16 +45,6 @@ export interface TsLoginFormResponse {
 
 /**
  * This is the login-form UI Component
- *
- * #### QA CSS CLASSES
- * - `qa-login-form`: Placed on the form element which contains this component
- * - `qa-login-form-email`: Placed on the {@link TsInputComponent} used for the "email" field
- * - `qa-login-form-password`: Placed on the {@link TsInputComponent} used for the "password" field
- * - `qa-login-form-remember-me`: Placed on the {@link TsCheckboxComponent} used for the "remember
- * me" checkbox
- * - `qa-login-form-forgot-password`: Placed on the {@link TsLinkComponent} used for the "forgot
- * password" link
- * - `qa-login-form-submit`: Placed on the {@link TsButtonComponent} used for the submit button
  *
  * @example
  * <ts-login-form
@@ -104,7 +93,7 @@ export class TsLoginFormComponent implements OnChanges {
   /**
    * Initialize the login form
    */
-  public loginForm: FormGroup | undefined = this.formBuilder.group(this.FORM_GROUP);
+  public loginForm: FormGroup = this.formBuilder.group(this.FORM_GROUP);
 
   /**
    * Define a flag to add/remove the form from the DOM
@@ -115,24 +104,21 @@ export class TsLoginFormComponent implements OnChanges {
    * Access the email form control
    */
   public get emailControl(): AbstractControl | null {
-    const form = this.loginForm;
-    return form ? form.get('email') : null;
+    return this.loginForm.get('email');
   }
 
   /**
    * Access the password form control
    */
   public get passwordControl(): AbstractControl | null {
-    const form = this.loginForm;
-    return form ? form.get('password') : null;
+    return this.loginForm.get('password');
   }
 
   /**
    * Access the rememberMe form control
    */
   public get rememberMeControl(): AbstractControl | null {
-    const form = this.loginForm;
-    return form ? form.get('rememberMe') : null;
+    return this.loginForm.get('rememberMe');
   }
 
   /**
@@ -193,9 +179,7 @@ export class TsLoginFormComponent implements OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private validatorsService: TsValidatorsService,
-    // private changeDetectorRef: ChangeDetectorRef,
   ) {}
-
 
   /**
    * Trigger a form reset if `triggerFormReset` is changed to TRUE
@@ -209,32 +193,10 @@ export class TsLoginFormComponent implements OnChanges {
     }
   }
 
-
   /**
    * Reset the form
-   *
-   * HACK: This is a hack. Currently there doesn't seem to be a good way to reset the form value and
-   * validations without simply re-initializing the form each time.
    */
-  private resetForm(): void {
-    this.loginForm?.reset();
-    // Destroy the form
-    // this.showForm = false;
-    //
-    // // Clear out the form
-    // // HACK: This is a hack around Angular to fully reset the form.
-    // this.loginForm = undefined;
-    //
-    // // Re-initialize the form
-    // this.loginForm = this.formBuilder.group(this.FORM_GROUP);
-    //
-    // // This timeout lets one change detection cycle pass so that the form is actually removed from
-    // // the DOM
-    // Promise.resolve().then(() => {
-    //   // Add the form back to the DOM
-    //   this.showForm = true;
-    //   this.changeDetectorRef.detectChanges();
-    // });
+  public resetForm(): void {
+    this.loginForm.reset();
   }
-
 }

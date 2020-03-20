@@ -156,7 +156,7 @@ describe(`TsTableComponent`, function() {
 
       tableElement = fixture.nativeElement.querySelector('.ts-table');
       component = fixture.componentInstance;
-      dataSource = fixture.componentInstance.dataSource;
+      dataSource = fixture.componentInstance.dataSource as any;
     });
 
     test(`should create table and display data source contents`, function() {
