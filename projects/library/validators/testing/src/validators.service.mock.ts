@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
 
 @Injectable({ providedIn: 'root' })

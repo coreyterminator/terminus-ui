@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  // ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -193,7 +193,7 @@ export class TsLoginFormComponent implements OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private validatorsService: TsValidatorsService,
-    private changeDetectorRef: ChangeDetectorRef,
+    // private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
 
@@ -217,23 +217,24 @@ export class TsLoginFormComponent implements OnChanges {
    * validations without simply re-initializing the form each time.
    */
   private resetForm(): void {
+    this.loginForm?.reset();
     // Destroy the form
-    this.showForm = false;
-
-    // Clear out the form
-    // HACK: This is a hack around Angular to fully reset the form.
-    this.loginForm = undefined;
-
-    // Re-initialize the form
-    this.loginForm = this.formBuilder.group(this.FORM_GROUP);
-
-    // This timeout lets one change detection cycle pass so that the form is actually removed from
-    // the DOM
-    Promise.resolve().then(() => {
-      // Add the form back to the DOM
-      this.showForm = true;
-      this.changeDetectorRef.detectChanges();
-    });
+    // this.showForm = false;
+    //
+    // // Clear out the form
+    // // HACK: This is a hack around Angular to fully reset the form.
+    // this.loginForm = undefined;
+    //
+    // // Re-initialize the form
+    // this.loginForm = this.formBuilder.group(this.FORM_GROUP);
+    //
+    // // This timeout lets one change detection cycle pass so that the form is actually removed from
+    // // the DOM
+    // Promise.resolve().then(() => {
+    //   // Add the form back to the DOM
+    //   this.showForm = true;
+    //   this.changeDetectorRef.detectChanges();
+    // });
   }
 
 }

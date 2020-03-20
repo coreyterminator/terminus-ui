@@ -7,8 +7,4 @@ module.exports = {
     '<rootDir>/projects/library/**/?(*.)spec.ts?(x)',
     '<rootDir>/projects/library/**/?(*.)test-sass.js?(x)',
   ],
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/demo/app',
-  ],
 };
