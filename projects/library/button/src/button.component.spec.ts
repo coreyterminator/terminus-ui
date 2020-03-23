@@ -422,14 +422,14 @@ describe(`TsButtonComponent`, function() {
 
     beforeEach(() => {
       buttonComponent.format = 'collapsable';
-      buttonComponent.windowService.nativeWindow.setTimeout = window.setTimeout;
+      buttonComponent['windowService'].nativeWindow.setTimeout = window.setTimeout;
     });
 
     test(`should set isCollapsed and trigger change detection after the delay`, () => {
       jest.useFakeTimers();
 
       const DELAY = 100;
-      buttonComponent.collapseWithDelay(DELAY);
+      buttonComponent['collapseWithDelay'](DELAY);
       jest.advanceTimersByTime(2000);
       fixture.detectChanges();
 
