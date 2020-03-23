@@ -52,6 +52,10 @@ export interface CustomColumn extends TsColumn {
   display: string;
   // The associated FormControl
   control: FormControl;
+  // The column name
+  name: string;
+  // The column width
+  width: number;
 }
 
 export interface GithubApi {

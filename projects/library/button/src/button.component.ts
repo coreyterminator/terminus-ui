@@ -14,10 +14,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TsWindowService } from '@terminus/ngx-tools/browser';
+
 import {
   TsStyleThemeTypes,
   tsStyleThemeTypesArray,
 } from '@terminus/ui/utilities';
+
 
 // Unique ID for each instance
 let nextUniqueId = 0;
@@ -163,6 +165,8 @@ export class TsButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Define the collapsed value and trigger the delay if needed
+   *
+   * @param value
    */
   @Input()
   public set collapsed(value: boolean) {
@@ -177,6 +181,8 @@ export class TsButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Define the button format. {@link TsButtonFormatTypes}
+   *
+   * @param value
    */
   @Input()
   public set format(value: TsButtonFormatTypes) {
@@ -226,6 +232,8 @@ export class TsButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Define an ID for the component
+   *
+   * @param value
    */
   @Input()
   public set id(value: string) {
@@ -250,6 +258,8 @@ export class TsButtonComponent implements OnInit, OnDestroy {
 
   /**
    * Define the theme
+   *
+   * @param value
    */
   @Input()
   public set theme(value: TsStyleThemeTypes) {
@@ -352,7 +362,7 @@ export class TsButtonComponent implements OnInit, OnDestroy {
    * NOTE: I'm not entirely sure why this `detectChanges` is needed. Supposedly zone.js should be patching setTimeout automatically.
    *
    * @param delay - The time to delay before collapsing the button
-   * @return The ID of the timeout
+   * @returns The ID of the timeout
    */
   private collapseWithDelay(delay: number): number {
     return this.windowService.nativeWindow.setTimeout(() => {

@@ -14,7 +14,7 @@
   },
   "scripts": {
     "////////// Section: Library": "==============================",
-    "NOTE-ON-BUILD": "Building the library without the prod flag is slow and cannot be cancelled. So for now we always build with prod.",
+    "NOTE-ON-BUILD": "Building the library with Ivy is slow and cannot be cancelled. So for now we always build with prod so Ivy is disabled.",
     "library:build": "node --max-old-space-size=8192 node_modules/@angular/cli/bin/ng build library --prod",
     "postlibrary:build": "yarn run library:build:styles && yarn run library:build:files",
     "library:build:watch": "yarn run library:build --watch",
@@ -31,7 +31,8 @@
     "library:test:debug": "yarn run library:test --debug --runInBand",
     "//////// Section: Demo App": "==============================",
     "___TODO___": "Hopefully once ngpackgr is moving style files we can remove the styles command??",
-    "predemo:start": "yarn run library:build:styles && yarn run link",
+    "predemo:startORIG": "yarn run library:build:styles && yarn run link",
+    "predemo:start": "yarn run library:build:styles",
     "demo:start": "ng serve demo",
     "demo:start:prod": "yarn run demo:start --prod",
     "demo:build": "ng build demo",

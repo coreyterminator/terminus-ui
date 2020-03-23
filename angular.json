@@ -22,7 +22,7 @@
           },
           "options": {
             "tsConfig": "projects/library/tsconfig.lib.json",
-            "project": "projects/library/ng-package.json",
+            "project": "projects/library/ng-package.json"
           }
         },
         "test": {
