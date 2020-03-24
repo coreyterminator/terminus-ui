@@ -12,8 +12,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -30,12 +30,10 @@ export interface TsLoginFormResponse {
    * User's email
    */
   email: string;
-
   /**
    * User's password
    */
   password: string;
-
   /**
    * Flag determining if a cookie should be set
    */
@@ -50,7 +48,6 @@ export interface TsLoginFormResponse {
  * <ts-login-form
  *              [inProgress]="true"
  *              [forgotPasswordLink]="['my/', 'path']"
- *              [triggerFormReset]="myBoolean"
  *              [loginCTA]=" 'Sign In' "
  *              [forgotPasswordText]=" 'Forget something?' "
  *              (submission)="myMethod($event)"
@@ -69,56 +66,29 @@ export interface TsLoginFormResponse {
 })
 export class TsLoginFormComponent implements OnChanges {
   /**
-   * Define the form group for re-use
+   * Store the login form
    */
-  private FORM_GROUP = {
-    email: [
-      null,
-      [
-        Validators.required,
-        this.validatorsService.email(),
-      ],
-    ],
-    password: [
-      null,
-      [
-        Validators.required,
-      ],
-    ],
-    rememberMe: [
-      false,
-    ],
-  };
-
-  /**
-   * Initialize the login form
-   */
-  public loginForm: FormGroup = this.formBuilder.group(this.FORM_GROUP);
-
-  /**
-   * Define a flag to add/remove the form from the DOM
-   */
-  public showForm = true;
+  public loginForm: FormGroup;
 
   /**
    * Access the email form control
    */
-  public get emailControl(): AbstractControl | null {
-    return this.loginForm.get('email');
+  public get emailControl(): FormControl {
+    return this.loginForm.get('email') as FormControl;
   }
 
   /**
    * Access the password form control
    */
-  public get passwordControl(): AbstractControl | null {
-    return this.loginForm.get('password');
+  public get passwordControl(): FormControl {
+    return this.loginForm.get('password') as FormControl;
   }
 
   /**
    * Access the rememberMe form control
    */
-  public get rememberMeControl(): AbstractControl | null {
-    return this.loginForm.get('rememberMe');
+  public get rememberMeControl(): FormControl {
+    return this.loginForm.get('rememberMe') as FormControl;
   }
 
   /**
@@ -164,7 +134,9 @@ export class TsLoginFormComponent implements OnChanges {
   public loginCTA = 'Log In';
 
   /**
-   * Allow a consumer to reset the form via an input
+   * Allow a consumer to reset the form via an @Input()
+   *
+   * @deprecated Please use the public method `resetForm()`
    */
   @Input()
   public triggerFormReset = false;
@@ -179,24 +151,41 @@ export class TsLoginFormComponent implements OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private validatorsService: TsValidatorsService,
-  ) {}
+  ) {
+    this.loginForm = this.createForm();
+  }
 
   /**
    * Trigger a form reset if `triggerFormReset` is changed to TRUE
-   * (explanation at `resetForm` method)
    *
    * @param changes - The inputs that have changed
    */
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.hasOwnProperty('triggerFormReset')) {
+    if (changes.hasOwnProperty('triggerFormReset') && changes.triggerFormReset.currentValue) {
       this.resetForm();
     }
   }
 
   /**
-   * Reset the form
+   * Reset the form state
+   *
+   * HACK: Calling `reset` doesn't reset individual control validators so we also reinitialize the form.
    */
   public resetForm(): void {
     this.loginForm.reset();
+    this.loginForm = this.createForm();
+  }
+
+  /**
+   * Create the log in form
+   *
+   * @returns The log in FormGroup
+   */
+  private createForm(): FormGroup {
+    return this.formBuilder.group({
+      email: new FormControl('', [Validators.required, this.validatorsService.email()]),
+      password: new FormControl('', Validators.required),
+      rememberMe: new FormControl(false),
+    });
   }
 }
